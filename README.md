@@ -16,7 +16,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentatio
 
 ## Prerequisities
 
-shallowHRD is a R script that can be launched from the command line. It relies on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) (V. Boeava et al., 2011) on sWGS (0.5-2x). ControlFREEC counts reads in overlapping windows and corrects the read count for GCcontent and remove low mappability windows.
+shallowHRD is a R script that can be launched from the command line. It relies on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (V. Boeava et al., 2011) on sWGS (0.5-2x). ControlFREEC counts reads in overlapping windows and corrects the read count for GCcontent, removing low mappability windows.
 
 First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
@@ -27,7 +27,7 @@ Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) h
 
 ## Run shallowHRD
 
-To run shallowHRD, two files of the ControlFREEC outputs are needed : the ratio and the info file. The names of the files should be in this format : *SAMPLE_NAME.bam_ratio.txt* and *SAMPLE_NAME.bam_info.txt*. Create a directory named after your sample (SAMPLE_NAME in the format exemple) and put the ratio and info file inside. Finally, put the *cytoBand_adapted_fr_hg19.csv* file in the folder containing the created directory.
+To run shallowHRD, two files of the ControlFREEC's output are needed : the ratio and the info file. The names of the files should be in this format : *SAMPLE_NAME.bam_ratio.txt* and *SAMPLE_NAME.bam_info.txt*. Create a directory named after your sample (SAMPLE_NAME in the format exemple) and put the ratio and info file inside. Finally, put the *cytoBand_adapted_fr_hg19.csv* file in the folder containing the created directory.
 
 The command line to launch the shallowHRD is :
 
