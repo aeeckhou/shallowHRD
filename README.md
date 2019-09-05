@@ -3,7 +3,6 @@
 This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentation (via ControlFREEC) to infer the Homologous Recombination status of a tumor based on the number of Large-scale State Transtions (LSTs).
 
 
-
 ## Requirements
 
 * R installed
@@ -35,12 +34,13 @@ The command line to launch the shallowHRD is :
 Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/created/directory
 ```
 
-## Results
-
+## (Results)
 
 
 
 ## Outputs
+
+
 
 ## Nota Bene
 
@@ -50,8 +50,8 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ## Contact
 
-alexandre.eeckhoutte@curie.fr
-tatiana.popova@curie.fr
+alexandre.eeckhoutte@curie.fr \n
+tatiana.popova@curie.fr \n
 marc-henri.stern@curie.fr
 
 
