@@ -1,0 +1,13 @@
+Program_Version	v11
+Sample_Name	D153R01.bam
+Control_Used	False
+CGcontent_Used	True
+Mappability_Used	True
+Looking_For_Subclones	False
+Breakpoint_Threshold	0.65
+Window	20000
+Number_Of_Reads|Pairs_In_Sample	32592048
+Number_Of_Reads|Pairs_In_Control	0
+Output_Ploidy	2
+Sample_Purity	1
+Good_Polynomial_Fit	True
