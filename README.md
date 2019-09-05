@@ -50,8 +50,8 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ## Contact
 
-alexandre.eeckhoutte@curie.fr \n
-tatiana.popova@curie.fr \n
+alexandre.eeckhoutte@curie.fr <br/>
+tatiana.popova@curie.fr <br/>
 marc-henri.stern@curie.fr
 
 
