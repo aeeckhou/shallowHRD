@@ -34,7 +34,6 @@ The command line to launch the script is :
 Rscript /path/script/shallowHRD.R SAMPLE_NAME /path/folder/contaning/created/directory
 ```
 
-
 ## Results
 
 
