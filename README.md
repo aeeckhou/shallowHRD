@@ -12,15 +12,17 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentatio
   * gridExtra
   * DescTools
 
+
 ## Prerequisities
 
-shallowHRD is a Rscript that can be launched from the command line. It relies on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) (V. Boeava et al., 2011) on sWGS (0.5-2x). 
+shallowHRD is a R script that can be launched from the command line. It relies on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) (V. Boeava et al., 2011) on sWGS (0.5-2x). 
 
 First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
 BAM files should then be processed by ControlFREEC. The recommended options are indicated in a config file example in the repository (controlfreec_config_file_example). Briefly, depending on the coverage of the BAM files (0.5-2x), the window size should varies between 20kb and 60kb, with a step size half its length.
 
-Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository). 
+Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
+
 
 ## Run shallowHRD
 
@@ -28,9 +30,13 @@ To run shallowHRD, two files of the ControlFREEC outputs are needed : the ratio 
 
 The command line to launch the script is :
 
-**Rscript /path/script/shallowHRD.R SAMPLE_NAME /path/folder/contaning/created/directory**
+```
+Rscript /path/script/shallowHRD.R SAMPLE_NAME /path/folder/contaning/created/directory
+```
+
 
 ## Results
+
 
 
 
@@ -43,6 +49,11 @@ The command line to launch the script is :
 3. The ploidy provided by ControlFREEC is just 
 
 ## Contact
+
+alexandre.eeckhoutte@curie.fr
+tatiana.popova@curie.fr
+marc-henri.stern@curie.fr
+
 
 ## Publication
 
