@@ -47,7 +47,7 @@ D : Table recapitulating different data and the final diagnostic for the HR stat
 
 1. The overall pipeline works also on BAM files with a coverage much more important.
 2. The shallowHRD R script can be adapted to over kind of segmentation outputs ([QDNAseq](https://github.com/ccagc/QDNAseq) for instance)
-3. The ploidy provided by ControlFREEC is just 
+3. The ploidy provided by ControlFREEC is just an indication and should only be taken as such
 
 ## Contact
 
