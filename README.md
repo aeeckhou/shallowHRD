@@ -8,12 +8,12 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and a segmentation 
 
 ## Requirements
 
-* R installed (tested version 3.5.1)
-* Linux or MACS OS
+* R installed (tested v.3.5.1)
+* Linux
 * The following packages installed : 
-  * ggpubr
-  * gridExtra
-  * DescTools
+  * ggpubr (tested with v.0.2.3)
+  * gridExtra (tested with v.2.3)
+  * DescTools (tested with v.0.99.28)
 
 
 ## Prerequisities
