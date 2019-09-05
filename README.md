@@ -46,7 +46,7 @@ Two files named *example.bam_ratio.txt* and *example.bam_info.txt* are downloada
 
 ## Outputs
 
-All the figures and files created by the script will be available in the SAMPLE_NAME directory. 
+All the figures and files created by the script will be available in the created directory SAMPLE_NAME. 
 
 The summary plot figure recapitulating all the information will look like this :
 
