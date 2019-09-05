@@ -36,6 +36,8 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ## Outputs
 
+Summary plot :
+
 ![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example)
 
 A : Genomic profile with LSTs in green (the entire processed segmentation is represented in red if there are no LST) <br/>
