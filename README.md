@@ -4,7 +4,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentatio
 
 ## Introduction
 
-shallowHRD is a R script that can be launched from the command line. It relies on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (V. Boeava et al., 2011) on sWGS (0.5-2x). ControlFREEC counts reads in overlapping windows and corrects the read count for GCcontent, removing low mappability windows.
+shallowHRD is a R script that can be launched from the command line. It relies on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (V. Boeva et al., 2011) on sWGS (0.5-2x). ControlFREEC counts reads in overlapping windows and corrects the read count for GCcontent, removing low mappability windows.
 
 ## Requirements
 
