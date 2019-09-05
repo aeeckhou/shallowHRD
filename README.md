@@ -1,6 +1,6 @@
 # shallowHRD
 
-This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentation (via ControlFREEC) to infer the Homologous Recombination status of a tumor based on the number of Large-scale State Transtions (LSTs).
+This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and a segmentation of its genomic profile (via ControlFREEC) to infer the Homologous Recombination status of a tumor based on the number of Large-scale State Transtions (LSTs).
 
 ## Introduction
 
