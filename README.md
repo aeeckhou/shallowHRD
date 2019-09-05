@@ -68,6 +68,6 @@ marc-henri.stern@curie.fr
 
 ## Publication
 
-Submitted to BMC Bioinformatics.
+Submitted to __________.
 
 "shallowHRD : a cheap and fast automatized method to evaluate Homologous Recombination Deficiency using shallow Whole Genome Sequencing" A. Eeckhoutte et al., 2019
