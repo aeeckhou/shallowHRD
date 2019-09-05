@@ -20,7 +20,7 @@ First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-ME
 
 BAM files should then be processed by ControlFREEC. The recommended options are indicated in a config file example in the repository (controlfreec_config_file_example). Briefly, depending on the coverage of the BAM files (0.5-2x), the window size should varies between 20kb and 60kb, with a step size half its length.
 
-Finally, the file cytoBand_adapted_fr_hg19.csv (available in the repository). 
+Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository). 
 
 ## Run shallowHRD
 
