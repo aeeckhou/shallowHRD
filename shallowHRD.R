@@ -6,34 +6,23 @@ NAMEEE = args[1]
 path = args[2]
 hg19_cyto = args[3]
 
-# NAMEEE = "D153R01"
-# path = "/home/sternlab/Desktop/creation_nice_pipeline_shallowHRD/D153R01"
-# hg19_cyto = "/home/sternlab/Desktop/creation_nice_pipeline_shallowHRD/cytoBand_adapted_fr_hg19.csv"
+setwd(paste0(path))
 
-# setwd(paste(path, "/", NAMEEE,"/", sep = ""))
-# 
-# pPath<-paste(path, "/", NAMEEE,"/", sep = "")
-# outputPath<-paste(pPath)
-# inputPath<-paste(path, "/", NAMEEE,"/", sep = "")
-
-setwd(paste(path, sep = ""))
-
-pPath<-paste(path, sep = "")
+pPath<-paste0(path)
 outputPath<-paste(pPath)
-inputPath<-paste(path, sep = "")
+inputPath<-paste0(path)
 
 
 ##### Avoid error problem in command line #####
 
 continue_on_error <- function() { 
-  print("on going...") 
+  paste() 
 }
 options(error=continue_on_error) 
 
 
 ##### Cytoband_hg19 #####
 
-# cytobAnnot<-"cytoBand_adapted_fr_hg19.csv"
 cyt_Annot<-read.csv(hg19_cyto,header=T,fill=T)
 
 cyt_Annot<-cyt_Annot[,1:6]
@@ -70,9 +59,6 @@ chr_p<-round(chr_len[,1]/GG,3)
 
 ##### LIBRARIES #####
 
-# library("ggplot2")
-# library("RColorBrewer")
-# require("scales")
 library("ggpubr")
 library("gridExtra")
 library("DescTools")
@@ -82,14 +68,14 @@ library("DescTools")
 ## Function Local minima ##
 
 localMinima <- function(x) { 
-  y <- diff(c(.Machine$integer.max, x)) < 0L # diff un à un des y +  < 0
-  rle(y)$lengths                             # number of chained TRUE or FALSE
-  y <- cumsum(rle(y)$lengths)                # somme cumulé aux différents points : 1 7 10 13... 
-  y <- y[seq.int(1L, length(y), 2L)]         # 
-  if (x[[1]] == x[[2]]) {                    # retire des éléments de y
+  y <- diff(c(.Machine$integer.max, x)) < 0L 
+  rle(y)$lengths                             
+  y <- cumsum(rle(y)$lengths)                 
+  y <- y[seq.int(1L, length(y), 2L)]         
+  if (x[[1]] == x[[2]]) {                    
     y <- y[-1]
   }
-  y                                          # retourne les entiers qui marchent 
+  y                                          
 }
 
 
@@ -257,67 +243,59 @@ breakSmoothToLST<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
     
     tmp[,c_ind]<-seq(1,dim(tmp)[[1]])
     
-    kk<-which(round((tmp[,c_posE]-tmp[,c_posS])/10^6,1)<3) # segments inférieurs à 3Mb
-    
-    #		kk<-union(kk,which(tmp[,c_bin]<50))
+    kk<-which(round((tmp[,c_posE]-tmp[,c_posS])/10^6,1)<3) # segments smaller than 3Mb
     
     if(length(kk)>0){
       
-      kk<-kk[order((tmp[kk,c_posE]-tmp[kk,c_posS])/10^6)] # ordonne les segments inférieurs à 3Mb
+      kk<-kk[order((tmp[kk,c_posE]-tmp[kk,c_posS])/10^6)] 
       
       
       for(k in 1:length(kk)){
         
-        if(kk[k]==1){                                        # un seul segment < 3Mb
-          if(tmp[kk[k]+1,c_chr+1]==tmp[kk[k],c_chr+1]){      # si segment d'après même chr_arm
-            if(tmp[kk[k]+1,c_ind]!=0){                       # si l'index d'après différent de 0
-              tmp[kk[k],c_ind]<-0                            # alors on met un index 0   
+        if(kk[k]==1){                                        
+          if(tmp[kk[k]+1,c_chr+1]==tmp[kk[k],c_chr+1]){      
+            if(tmp[kk[k]+1,c_ind]!=0){                       
+              tmp[kk[k],c_ind]<-0                               
             }
           }                          
         }
         
         else{
-          if(kk[k]==dim(tmp)[[1]]){                                                # tous les segments concernés
-            if(tmp[kk[k]-1,c_chr+1]==tmp[kk[k],c_chr+1] & tmp[kk[k]-1,c_ind]!=0){  # si chrom_arm d'avant même et index différent de 0  
-              tmp[kk[k],c_ind]<-0}                                                 # on met index =0
+          if(kk[k]==dim(tmp)[[1]]){                                                
+            if(tmp[kk[k]-1,c_chr+1]==tmp[kk[k],c_chr+1] & tmp[kk[k]-1,c_ind]!=0){    
+              tmp[kk[k],c_ind]<-0}                                                 
           }
           else{
             
-            # si chr_arm d'avant et d'après même chr_arm et index différent de 0, on met index = 0
             if(tmp[kk[k]-1,c_chr+1]==tmp[kk[k]+1,c_chr+1] & tmp[kk[k]-1,c_ind]!=0 & tmp[kk[k]+1,c_ind]!=0){tmp[kk[k],1]<-0}
             
-            # si chr_arm avant même chr_arm et après différent, et que avant index différent de 0, on met index = 0
             if(tmp[kk[k]-1,c_chr+1]==tmp[kk[k],c_chr+1] & tmp[kk[k]+1,c_chr+1]!=tmp[kk[k],c_chr+1] & tmp[kk[k]-1,c_ind]!=0){tmp[kk[k],c_ind]<-0}
             
-            # si chr_arm après même chr_arm et avant différent et que après index différent de 0, on met index = 0 
             if(tmp[kk[k]+1,c_chr+1]==tmp[kk[k],c_chr+1] & tmp[kk[k]-1,c_chr+1]!=tmp[kk[k],c_chr+1] & tmp[kk[k]+1,c_ind]!=0){tmp[kk[k],c_ind]<-0}
             
-            # si chr_arm après et avant différent, alors on met 0 
             if(tmp[kk[k]+1,c_chr+1]!=tmp[kk[k],c_chr+1] & tmp[kk[k]-1,c_chr+1]!=tmp[kk[k],c_chr+1]){tmp[kk[k],c_ind]<-0}
             
           }
         }
-      } # assignation de 0 à tout segments inférieurs à 0 possibles ceux possibles 
+      } 
       
-      tt<-which(tmp[,c_ind]==0) # tous les segments inférieurs à 3 Mb qui ont été assigné à 0
+      tt<-which(tmp[,c_ind]==0) 
       
-      if(length(tt)>0){tmp <- tmp[-tt,];BreaksSmall<-BreaksSmall+length(tt)} # s'il y a des segments dans ce cas, retiré de tmp
-      # Breaksmall prends le nombre de segment dans ce cas
+      if(length(tt)>0){tmp <- tmp[-tt,];BreaksSmall<-BreaksSmall+length(tt)} 
       
-      for(k in 1:(dim(tmp)[[1]]-1)){ # parcours nouveau tmp
+      for(k in 1:(dim(tmp)[[1]]-1)){ 
         
-        if(round((tmp[k+1,c_posS]-tmp[k,c_posE])/10^6,1)<3){    # arrondi de la fin du segment d'après moins début de celui d'avant 
-          # inférieur à 3Mb
+        if(round((tmp[k+1,c_posS]-tmp[k,c_posE])/10^6,1)<3){    
           
-          if(tmp[k,c_chr+1]==tmp[k+1,c_chr+1] & abs(tmp[k,c_cn]-tmp[k+1,c_cn])<THR){ # si segment et après même chr_arm, et diff < THR
+          if(tmp[k,c_chr+1]==tmp[k+1,c_chr+1] & abs(tmp[k,c_cn]-tmp[k+1,c_cn])<THR){ 
             
-            tmp[k+1,c_posS]<-tmp[k,c_posS]          # segment start k+1 prend start k d'avant
+            tmp[k+1,c_posS]<-tmp[k,c_posS]        
             
-            w<-c(tmp[k+1,c_posE]-tmp[k+1,c_posS],tmp[k,c_posE]-tmp[k,c_posS]) # c(distance fin k+1 début k+1, taille k)
+            w<-c(tmp[k+1,c_posE]-tmp[k+1,c_posS],tmp[k,c_posE]-tmp[k,c_posS]) 
             
-            tmp[k+1,c_cn]<-weighted.mean(c(tmp[k+1,c_cn],tmp[k,c_cn]),w) # ratio_median = moyenne pondéré en fonction facteur taille
+            tmp[k+1,c_cn]<-weighted.mean(c(tmp[k+1,c_cn],tmp[k,c_cn]),w) 
             
-            tmp[k,c_ind]<-0                                              # index de k = 0
+            tmp[k,c_ind]<-0                                              
             
           }
           
@@ -325,7 +303,7 @@ breakSmoothToLST<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
         }
       }
       
-      tt<-which(tmp[,c_ind]==0);if(length(tt)>0){tmp<-tmp[-tt,]} # retire segment ainsi lier
+      tt<-which(tmp[,c_ind]==0);if(length(tt)>0){tmp<-tmp[-tt,]} 
       
       
     }else{FL<-F}  
@@ -419,11 +397,11 @@ ShortIntestBreaksSmooth<-function(THR,lenMB,tmp,c_ind=c_ind,c_chr=c_chr,c_posS=c
 
 ##### Fast ControlFREEC gathering #####
 
-dataTable <- read.table(paste(pPath,"/",NAMEEE,".bam_ratio.txt", sep = ""), header = TRUE)
+dataTable <- read.table(paste0(pPath,"/",NAMEEE,".bam_ratio.txt"), header = TRUE)
 dataTable = dataTable[,-5]
 
-dataTable = dataTable[which(!dataTable$Chromosome == "X"),] # remove X
-dataTable = dataTable[which(!dataTable$Chromosome == "Y"),] # remove Y
+dataTable = dataTable[which(!dataTable$Chromosome == "X"),] 
+dataTable = dataTable[which(!dataTable$Chromosome == "Y"),] 
 
 dataTable[,1] = as.numeric(as.character(dataTable[,1]))
 
@@ -449,12 +427,12 @@ ratio <- data.frame(dataTable)
 
 short_size_window = size_window/1000
 
-write.table(ratio, file = paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = "") , row.names = FALSE, col.names = TRUE, sep = "\t")
+write.table(ratio, file = paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv") , row.names = FALSE, col.names = TRUE, sep = "\t")
 
-X=read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE, sep = "\t")            
+X=read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE, sep = "\t")            
 
-X=X[,-1] # feature
-X=X[,-4] # ratio
+X=X[,-1] 
+X=X[,-4] 
 
 ## Remove spurious regions based on telomere and centromere from UCSC
 
@@ -532,8 +510,8 @@ X$chr_arm <- rep(0,nrow(X))
 colnames(X) <- c("chr", "start", "end", "ratio_median", "chr_arm")
 X=X[c("chr", "chr_arm", "start", "end", "ratio_median")]
 
-X[,3]=as.numeric(as.character(X[,3])) # start
-X[,4]=as.numeric(as.character(X[,4])) # end
+X[,3]=as.numeric(as.character(X[,3])) 
+X[,4]=as.numeric(as.character(X[,4])) 
 
 tt <- X[,1] == 1 & X[,3] < 125000000 & X[,4] < 125000000
 X[tt,2] = 1
@@ -777,7 +755,7 @@ X[tt,4] = 14700000
 X=rbind(X[(1:which(tt==TRUE)),], c(X[tt,1], 2, 14700001, B, X[tt,5]) , X[-(1:which(tt==TRUE)),])
 rownames(X) <- NULL 
 
-X[,2]<-X[,1]+(X[,2]-1)/2      # tranform into 1 & 1.5
+X[,2]<-X[,1]+(X[,2]-1)/2      
 
 tt=which(X$ratio_median==-Inf)
 
@@ -790,12 +768,12 @@ X=as.matrix(X)
 L = dim(X)[1]
 A = matrix(0, ncol=6, nrow=L)
 
-i=1    # ligne pour regarder dans X
-c=1    # ligne pour stocker bonne valeur dans A
+i=1    
+c=1    
 
 while (i < L){
-  if(X[i,2]==X[i+1,2]){             # Egalité chrom_arm ligne i et i+1 
-    if (X[i,5]==X[i+1,5]){          # Egalité ratio_median ligne i et i+1
+  if(X[i,2]==X[i+1,2]){             
+    if (X[i,5]==X[i+1,5]){          
       n=1
       while (X[i,2]==X[i+n,2] & X[i,5]==X[i+n,5] & i+n < L){
         n=n+1
@@ -819,7 +797,7 @@ while (i < L){
   }
   else{
     A[c,]=c(X[i,1], X[i,2], X[i,3], X[i,4], X[i,5], X[i,4]-X[i,3]+1)
-    i=i+1                                        # avancement de i+1 si chr_arm différents
+    i=i+1                                        
     c=c+1                         
   }  
 }
@@ -828,16 +806,16 @@ A=subset(A, A[,1] != 0)
 rownames(A) <- NULL 
 colnames(A) <- c("chr", "chr_arm", "start", "end", "ratio_median", "size")
 
-write.table(A, file = paste(NAMEEE,"_medianratio_gatheredR_automatized_final.txt", sep = ""), sep = "\t", row.names = FALSE)
+write.table(A, file = paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.txt"), sep = "\t", row.names = FALSE)
 
 options(show.error.messages = TRUE)
 
 ##### Find Threshold #####
 
-X = read.table(paste(NAMEEE,"_medianratio_gatheredR_automatized_final.txt", sep = ""), sep = "\t", header = TRUE)
+X = read.table(paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.txt"), sep = "\t", header = TRUE)
 X = X[which(X[,6] > 2999999),]
 
-X = X[which(X[,6] > ((quantile(X[,6])[[4]] - quantile(X[,6])[[2]])/2)),]   # find the best size for the density plot
+X = X[which(X[,6] > ((quantile(X[,6])[[4]] - quantile(X[,6])[[2]])/2)),]   
 
 L=dim(X)[1]
 X=data.matrix(X)
@@ -866,7 +844,7 @@ ploty <- ggplot(test, aes(x = test)) + geom_density() +
         axis.text.y = element_text(size=15),
         axis.title.y = element_blank(),
         panel.background = element_blank())
-ggsave(paste(NAMEEE,"_THR", sep = ""), plot = ploty, device = "jpeg", width = 20, height = 10)
+ggsave(paste0(NAMEEE,"_THR"), plot = ploty, device = "jpeg", width = 20, height = 10)
 
 
 ##### Reading and initialisation #####
@@ -887,47 +865,45 @@ ColNamesTMP<-c("index", "chr","chr_arm","posStart", "posEnd", "ratio")
 
 c_ind<-1; c_chr<-2;c_posS<-4; c_posE<-5; c_cn<-6; c_conf<-8
 
-LLBB<-c(3,4,5,6,7,8,9,10,11) # what size LST
+LLBB<-c(3,4,5,6,7,8,9,10,11)          # size LST tested
 
-TAB<-matrix(0,nSample,20)              # matrix to stock results (colonne 20)
-rownames(TAB)<-seq(1:nSample)          # Nombre de rangée = nombre de sample
-colnames(TAB)<-seq(1,20)               # colnames de 1 à 20
+TAB<-matrix(0,nSample,20)              # matrix to stock results 
+rownames(TAB)<-seq(1:nSample)          
+colnames(TAB)<-seq(1,20)               
 
 colnames(TAB)[1:6]<-c("p_BAF","q_LRR","2copyLRR","DNA_ind","All_breaks","less3Mb_breaks")
 
 ii<-1
 
-rownames(TAB)[ii]<-fileNames[ii] # place the name of file in TAB rowname de TAB 
+rownames(TAB)[ii]<-fileNames[ii] 
 
-results<-readSegmFile(segFileName=segFiles[ii])  # lecture du fichier ( bcq cols inutiles)
-tmp<-results$tmp                                 # Stocke partie résultat interressant 
+results<-readSegmFile(segFileName=segFiles[ii])  
+tmp<-results$tmp                                  
 
-## ajoute les index et segments
-
-tmp <- cbind(seq(1,dim(tmp)[[1]]),tmp) # add index
+tmp <- cbind(seq(1,dim(tmp)[[1]]),tmp) 
 colnames(tmp)[1]<-c("index")
 
-tmp <- cbind(tmp,rep(0,nrow(tmp)))# add segment
+tmp <- cbind(tmp,rep(0,nrow(tmp))) 
 colnames(tmp)[8]<-c("level")
 
-write.table(tmp, file = paste(NAMEEE,"_",short_size_window,"kb_I", sep=""), sep = "\t", row.names = FALSE)  # gather
+write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_I"), sep = "\t", row.names = FALSE)  
 
 
-tt<-which(tmp[,c_chr+1]>23.6)                            # exclusion chr24 et plus 
+tt<-which(tmp[,c_chr+1]>23.6)                            # exclusion chr24 and more   
 if(length(tt)>0){tmp<-tmp[-tt,]}
 
-tt<-which(tmp[,c_chr+1]==21)                             # exclusion partie short arm chr21
+tt<-which(tmp[,c_chr+1]==21)                             # exclusion short arm chr21
 if(length(tt)>0){tmp<-tmp[-tt,]}
 
 tt<-which(tmp[,c_chr+1]==22)                             # exclusion short arm chr22
 if(length(tt)>0){tmp<-tmp[-tt,]}
 
-write.table(tmp, file = paste(NAMEEE,"_",short_size_window,"kb_II", sep=""), sep = "\t", row.names = FALSE) # no chr_amr p 21 22 et plus de 24
+write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_II"), sep = "\t", row.names = FALSE) # no chr_amr p 21 22 et plus de 24
 
 tmp[,7] = tmp[,5] - tmp[,4] + 1
 
-tmp_3mb = tmp[which(tmp[,7] > 2999999),] # segment de plus de 3 Mb
-cop_tmp = tmp_3mb                       # copie du fichier des segments de plus de 3Mb
+tmp_3mb = tmp[which(tmp[,7] > 2999999),]   
+cop_tmp = tmp_3mb                    
 THR=Threshold
 
 if (THR > 0.45){
@@ -941,12 +917,13 @@ level=1
 
 
 ##### Gather big segment (> 3Mb) #####
+
 options(show.error.messages = FALSE)
 
 while (dim(cop_tmp)[1] > 1){  
   
-  line_largest_index = which.max(cop_tmp[,7])             # ligne avec segment le plus grand
-  largest_index = cop_tmp[line_largest_index,1]           # index associé (change quand on remove)
+  line_largest_index = which.max(cop_tmp[,7])             # biggest segment
+  largest_index = cop_tmp[line_largest_index,1]           # associated index
   ratio_largest = cop_tmp[line_largest_index,6]           # median_ratio segment
   ratio_largest = ratio_largest + 0.00001                 # avoid picking same value
   
@@ -961,7 +938,7 @@ while (dim(cop_tmp)[1] > 1){
     validation = 0
     n = length(closest_index)
     for (g in 1:n){
-      if (abs(cop_tmp[i,6] - cop_tmp[which((cop_tmp[,1]==closest_index[g])),6]) < THR){   # 
+      if (abs(cop_tmp[i,6] - cop_tmp[which((cop_tmp[,1]==closest_index[g])),6]) < THR){   
         validation = validation + 1}
     }
     if (validation == n){
@@ -990,15 +967,15 @@ L1 = dim(tmp_3mb)[1]
 A = matrix(0, ncol=8, nrow=L1)
 
 i=1
-c=1   # 2
+c=1   
 while (i<L1+1){
   if (i==L1){
     A[c,]=c(tmp_3mb[i,1], tmp_3mb[i,2], tmp_3mb[i,3], tmp_3mb[i,4], tmp_3mb[i,5], tmp_3mb[i,6], tmp_3mb[i,5]-tmp_3mb[i,4]+1, tmp_3mb[i,8])    # segment pas sur deux lignes, a stocker seul 
     i=i+1
     c=c+1}
   else{
-    if(tmp_3mb[i,3] == tmp_3mb[i+1,3]){                                           # Egalité de chr_arm
-      if (tmp_3mb[i,8] == tmp_3mb[i+1,8]){                                        # Egalite de level
+    if(tmp_3mb[i,3] == tmp_3mb[i+1,3]){                                           
+      if (tmp_3mb[i,8] == tmp_3mb[i+1,8]){                                        
         n=1
         somme=tmp_3mb[i,6]
         while (tmp_3mb[i,8] == tmp_3mb[i+n,8] && tmp_3mb[i,3] == tmp_3mb[i+n,3]){
@@ -1009,11 +986,11 @@ while (i<L1+1){
         A[c,]=c(tmp_3mb[i,1], tmp_3mb[i,2], tmp_3mb[i,3], tmp_3mb[i,4], tmp_3mb[i+n-1,5], (somme)/n, tmp_3mb[i+n-1,5]- tmp_3mb[i,4]+1, tmp_3mb[i,8])
         i=i+n
         c=c+1}
-      else{                                             # pas d'égalité de niveau, on stocke directement la ligne
+      else{                                            
         A[c,]=c(tmp_3mb[i,1], tmp_3mb[i,2], tmp_3mb[i,3], tmp_3mb[i,4], tmp_3mb[i,5], tmp_3mb[i,6], tmp_3mb[i,5]-tmp_3mb[i,4]+1, tmp_3mb[i,8])    # segment pas sur deux lignes, a stocker seul 
         i=i+1
         c=c+1}}
-    else{                                              # pas egalite des chromosomes entre i et i+1, on stocke la ligne i
+    else{                                              
       A[c,]=c(tmp_3mb[i,1], tmp_3mb[i,2], tmp_3mb[i,3], tmp_3mb[i,4], tmp_3mb[i,5], tmp_3mb[i,6], tmp_3mb[i,5]-tmp_3mb[i,4]+1, tmp_3mb[i,8])
       i=i+1                                                              
       c=c+1}
@@ -1026,7 +1003,7 @@ rownames(A) <- NULL
 colnames(A) <- c("index", "chr", "chr_arm", "start", "end", "ratio_median", "size", "level")
 
 tmp_3mb=A
-write.table(tmp_3mb, file = paste(NAMEEE,"_",short_size_window,"kb_III", sep=""), sep = "\t", row.names = FALSE) 
+write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_III"), sep = "\t", row.names = FALSE) 
 
 
 ##### Reput small segment & Smoothing #####
@@ -1034,12 +1011,12 @@ write.table(tmp_3mb, file = paste(NAMEEE,"_",short_size_window,"kb_III", sep="")
 options(show.error.messages = FALSE)
 
 tmp_0.1_3mb=tmp[which(tmp[,7] > 99999),]
-tmp_0.1_3mb=tmp_0.1_3mb[which(tmp_0.1_3mb[,7] < 2999999),]  # pb ?
+tmp_0.1_3mb=tmp_0.1_3mb[which(tmp_0.1_3mb[,7] < 2999999),]  
 
 L_3mb=dim(tmp_3mb)[1]
 l_0.1_3mb=dim(tmp_0.1_3mb)[1]
 
-values = unique(tmp_0.1_3mb[,3][!tmp_0.1_3mb[,3] %in% tmp_3mb[,3]]) # check all chrm_arm that are not in 
+values = unique(tmp_0.1_3mb[,3][!tmp_0.1_3mb[,3] %in% tmp_3mb[,3]])  
 length=length(values)
 
 for (missing_chr_arm in values){
@@ -1070,32 +1047,31 @@ l_0.1_3mb=dim(tmp_0.1_3mb)[1]
 i=1
 c=1
 
-while (i < l_0.1_3mb + 1){          # <=> Ligne arrêt non traitée && parcours segments entre 0.1 et 3 mb
-  c=1                                                                            # reset parcours plus 3mb
+while (i < l_0.1_3mb + 1){          
+  c=1                                                                            # reset 
   L_3mb=dim(tmp_3mb)[1]
-  while (c < L_3mb+1){                                                             # parcour segments de plus de 3mb rassemblé
-    #print(i, tmp_0.1_3mb[i,]) # debug pb ligne
-    if (tmp_0.1_3mb[i,3] == tmp_3mb[c,3]){                                            # même chr_arm
-      if (tmp_0.1_3mb[i,5] < tmp_3mb[c,4]){                         ############### 1 - Avant tout segs du chr_arm
-        if (c==1){ # dès la première ligne, mais pas à relier
-          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){          # depassement pas de réunion 
+  while (c < L_3mb+1){                                                            
+    if (tmp_0.1_3mb[i,3] == tmp_3mb[c,3]){                                            
+      if (tmp_0.1_3mb[i,5] < tmp_3mb[c,4]){                         ############### 1 - Before all segments chr_arm
+        if (c==1){ # 
+          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){          # No gathering 
             tmp_3mb=rbind(c(tmp_0.1_3mb[i,1],tmp_0.1_3mb[i,2],tmp_0.1_3mb[i,3],tmp_0.1_3mb[i,4],tmp_0.1_3mb[i,5], 
                             tmp_0.1_3mb[i,6],tmp_0.1_3mb[i,5]-tmp_0.1_3mb[i,4]+1, tmp_0.1_3mb[i,8]) , tmp_3mb[c:L_3mb,])
             i=i+1
             c=L_3mb+1}
-          else{                     # réunion
+          else{                                                     # gathering
             tmp_3mb=rbind(c(tmp_0.1_3mb[i,1], tmp_0.1_3mb[i,2], tmp_0.1_3mb[i,3], tmp_0.1_3mb[i,4], tmp_3mb[c,5], 
                             tmp_3mb[c,6],tmp_3mb[c,5]-tmp_0.1_3mb[i,4]+1,tmp_3mb[c,8]), tmp_3mb[(c):L_3mb,])
             i=i+1
             c=L_3mb+1}
         }
         else{
-          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){                     # depassement THR, pas réunion
+          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){                     # no gathering
             tmp_3mb=rbind(tmp_3mb[1:(c-1),], c(tmp_0.1_3mb[i,1],tmp_0.1_3mb[i,2],tmp_0.1_3mb[i,3],tmp_0.1_3mb[i,4],tmp_0.1_3mb[i,5], 
                                                tmp_0.1_3mb[i,6],tmp_0.1_3mb[i,5]-tmp_0.1_3mb[i,4]+1, tmp_0.1_3mb[i,8]) , tmp_3mb[c:L_3mb,])
             i=i+1
             c=L_3mb+1}
-          else{                                                                # reunion avec grand segment
+          else{                                                                # gathering
             tmp_3mb=rbind(tmp_3mb[1:(c-1),], c(tmp_0.1_3mb[i,1], tmp_0.1_3mb[i,2], tmp_0.1_3mb[i,3], tmp_0.1_3mb[i,4], tmp_3mb[c,5], 
                                                tmp_3mb[c,6],tmp_3mb[c,5]-tmp_0.1_3mb[i,4]+1,tmp_3mb[c,8]), tmp_3mb[(c+1):L_3mb,])
             i=i+1
@@ -1103,44 +1079,44 @@ while (i < l_0.1_3mb + 1){          # <=> Ligne arrêt non traitée && parcours 
         }
       }
       
-      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,4] && tmp_0.1_3mb[i,5] <= tmp_3mb[c,5]){    ########## 2 - A l'intérieur segs
+      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,4] && tmp_0.1_3mb[i,5] <= tmp_3mb[c,5]){    ########## 2 - Inside segments
         if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){
-          if(c+1>L_3mb){          # A la fin                          
+          if(c+1>L_3mb){          # after                          
             tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1],tmp_3mb[c,2] ,tmp_3mb[c,3], tmp_3mb[c,4], tmp_0.1_3mb[i,4]-1,tmp_3mb[c,6],tmp_0.1_3mb[i,4]-1-tmp_3mb[c,4]+1,tmp_3mb[c,8]) ,
                           tmp_0.1_3mb[i,] , c(tmp_3mb[c,1],tmp_3mb[c,2],tmp_3mb[c,3], tmp_0.1_3mb[i,5] +1 , tmp_3mb[c,5],tmp_3mb[c,6], tmp_3mb[c,5] - (tmp_0.1_3mb[i,5]+1) + 1,tmp_3mb[c,8]))
             i=i+1
             c=L_3mb+1}
           else{
-            if (tmp_0.1_3mb[i,4] == tmp_3mb[c,4]){               # égalité début des deux segments
+            if (tmp_0.1_3mb[i,4] == tmp_3mb[c,4]){               # same beginning
               tmp_3mb=rbind(tmp_3mb[1:(c-1),] , tmp_0.1_3mb[i,] , c(tmp_3mb[c,1],tmp_3mb[c,2],tmp_3mb[c,3], tmp_0.1_3mb[i,5] +1 , tmp_3mb[c,5],tmp_3mb[c,6], tmp_3mb[c,5] - (tmp_0.1_3mb[i,5]+1) + 1,tmp_3mb[c,8]) ,
                             tmp_3mb[(c+1):L_3mb,])
               i=i+1
               c=L_3mb+1}
-            else if (tmp_0.1_3mb[i,5] == tmp_3mb[c,5]) {         # égalité fin des deux segments
+            else if (tmp_0.1_3mb[i,5] == tmp_3mb[c,5]) {         # same end
               tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1],tmp_3mb[c,2],tmp_3mb[c,3], tmp_3mb[i,4], tmp_0.1_3mb[c,4] - 1, tmp_3mb[c,6], tmp_0.1_3mb[c,4] - 1 - (tmp_3mb[i,4]) + 1,  tmp_3mb[c,8]), tmp_0.1_3mb[i,] , 
                             tmp_3mb[(c+1):L_3mb,])
               i=i+1
               c=L_3mb+1}
-            else {               # classique au milieu
+            else {               # in the middle
               tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1], tmp_3mb[c,2], tmp_3mb[c,3], tmp_3mb[c,4], tmp_0.1_3mb[i,4]-1, tmp_3mb[c,6], tmp_0.1_3mb[i,4]-1-tmp_3mb[c,4]+1,tmp_3mb[c,8]) ,
                             tmp_0.1_3mb[i,] , c(tmp_3mb[c,1],tmp_3mb[c,2],tmp_3mb[c,3], tmp_0.1_3mb[i,5] +1 , tmp_3mb[c,5],tmp_3mb[c,6], tmp_3mb[c,5] - (tmp_0.1_3mb[i,5]+1) + 1,tmp_3mb[c,8]) ,
                             tmp_3mb[(c+1):L_3mb,])
               i=i+1
               c=L_3mb+1}
           }}
-        else{                 # dans le fit, on ne fait rien
+        else{                 # nothing to be done
           i=i+1
           c=L_3mb+1}
       }
       
-      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,5] && tmp_0.1_3mb[i,5] <= tmp_3mb[c+1,4] && tmp_3mb[c,3] == tmp_3mb[c+1,3]){     ########## 3 - entre deux segs de même chr_arm
-        if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= THR && abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6]) <= THR){       # deux in_range THR
-          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6])){     # c plus proche
+      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,5] && tmp_0.1_3mb[i,5] <= tmp_3mb[c+1,4] && tmp_3mb[c,3] == tmp_3mb[c+1,3]){     ########## 3 - between two segments same chr_arm
+        if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= THR && abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6]) <= THR){       # two in range THR
+          if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6])){     # c closer
             tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1], tmp_3mb[c,2], tmp_3mb[c,3], tmp_3mb[c,4], tmp_0.1_3mb[i,5], tmp_3mb[c,6],
                                                 tmp_0.1_3mb[i,5]-tmp_3mb[c,4]+1,tmp_3mb[c,8]) , tmp_3mb[(c+1):L_3mb,])  
             i=i+1
             c=L_3mb+1}
-          else {                      # c+1 plus proche
+          else {                      # c+1 closer
             if (c+2 > L_3mb){
               tmp_3mb=rbind(tmp_3mb[1:c,] , c(tmp_3mb[c+1,1], tmp_3mb[c+1,2], tmp_3mb[c+1,3], tmp_0.1_3mb[i,4], tmp_3mb[c+1,5], tmp_3mb[c+1,6],
                                               tmp_3mb[c+1,5]-tmp_0.1_3mb[i,4]+1,tmp_3mb[c+1,8])) 
@@ -1153,19 +1129,19 @@ while (i < l_0.1_3mb + 1){          # <=> Ligne arrêt non traitée && parcours 
               c=L_3mb+1}
           }
         }
-        else if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= THR){                   # seulement c
+        else if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= THR){                   # only c
           tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1], tmp_3mb[c,2], tmp_3mb[c,3], tmp_3mb[c,4], tmp_0.1_3mb[i,5], tmp_3mb[c,6],
                                               tmp_0.1_3mb[i,5]-tmp_3mb[c,4]+1,tmp_3mb[c,8]) , tmp_3mb[(c+1):L_3mb,])  
           i=i+1
           c=L_3mb+1}
-        else if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6]) <= THR){                  # seulement c+1
+        else if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c+1,6]) <= THR){                  # only c+1
           if (c+2 > L_3mb){
             tmp_3mb=rbind(tmp_3mb[1:c,] , c(tmp_3mb[c+1,1], tmp_3mb[c+1,2], tmp_3mb[c+1,3], tmp_0.1_3mb[i,4], tmp_3mb[c+1,5], tmp_3mb[c+1,6],
                                             tmp_3mb[c+1,5]-tmp_0.1_3mb[i,4]+1,tmp_3mb[c+1,8]))  
             i=i+1
             c=L_3mb+1}
           else{
-            if (tmp_0.1_3mb[i+1,5] < tmp_3mb[c+1,4] && tmp_0.1_3mb[i+1,3] == tmp_3mb[c+1,3]){  # il reste des petits segments à caller après
+            if (tmp_0.1_3mb[i+1,5] < tmp_3mb[c+1,4] && tmp_0.1_3mb[i+1,3] == tmp_3mb[c+1,3]){  # small segments afterward
               tmp_3mb=rbind(tmp_3mb[1:c,] , c(tmp_0.1_3mb[i,1], tmp_0.1_3mb[i,2], tmp_0.1_3mb[i,3], tmp_0.1_3mb[i,4], tmp_0.1_3mb[i,5], tmp_0.1_3mb[i,6],
                                               tmp_0.1_3mb[i,5]-tmp_0.1_3mb[i,4]+1,tmp_0.1_3mb[i,8]) , tmp_3mb[(c+1):L_3mb,])  
               i=i+1
@@ -1183,7 +1159,7 @@ while (i < l_0.1_3mb + 1){          # <=> Ligne arrêt non traitée && parcours 
           i=i+1
           c=L_3mb+1}
       }
-      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,5] && (tmp_3mb[c,3] != tmp_3mb[c+1,3] | is.null(tmp_3mb[c+1,3]))){     ############## 4 - après dernier segs chr_arm
+      else if (tmp_0.1_3mb[i,4] >= tmp_3mb[c,5] && (tmp_3mb[c,3] != tmp_3mb[c+1,3] | is.null(tmp_3mb[c+1,3]))){     ############## 4 - after last segment chr_arm
         if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) <= THR){
           if (c+1 > L_3mb){
             tmp_3mb=rbind(tmp_3mb[1:(c-1),] , c(tmp_3mb[c,1],tmp_3mb[c,2],tmp_3mb[c,3],tmp_3mb[c,4],
@@ -1219,11 +1195,11 @@ while (i < l_0.1_3mb + 1){          # <=> Ligne arrêt non traitée && parcours 
 
 options(show.error.messages = TRUE)
 
-write.table(tmp_3mb, file = paste(NAMEEE,"_",short_size_window,"kb_IV", sep=""), sep = "\t", row.names = FALSE)
+write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_IV"), sep = "\t", row.names = FALSE)
 
 tmp_3mb<-breakSmoothToLST(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
-write.table(tmp_3mb, file = paste(NAMEEE,"_",short_size_window,"kb_V", sep=""), sep = "\t", row.names = FALSE)
+write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_V"), sep = "\t", row.names = FALSE)
 
 
 ##### Graphe final segmentation diag #####
@@ -1244,7 +1220,7 @@ test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line))
         axis.text.y = element_text(size=15),
         axis.title.y = element_blank(),
         panel.background = element_blank())
-suppressWarnings(ggsave(paste(NAMEEE,"_test_ploty_CN_level", sep = ""), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
+suppressWarnings(ggsave(paste0(NAMEEE,"_test_ploty_CN_level"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
 
 
 ##### Call LSTs #####
@@ -1256,9 +1232,9 @@ colnames(LSTs_data_frame) <- c("Size_LST", "Number_LST")
 for (i in (3:11)){
   WC<-LST_control(THR,lenBIN=500,lenMB=i,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
   LSTs_data_frame[i-2,2] = sum(WC[,1])}
-write.table(LSTs_data_frame, file = paste(NAMEEE,"_LSTs", sep=""), sep = "\t", row.names = FALSE)
+write.table(LSTs_data_frame, file = paste0(NAMEEE,"_LSTs"), sep = "\t", row.names = FALSE)
 
-# pour graphe 10Mb 
+# For graphe 10Mb 
 
 WC<-LST_control(THR,lenBIN=500,lenMB=10,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
@@ -1281,13 +1257,12 @@ if (is.null(l) == FALSE){
   test=test[-l,]
 }
 
-write.table(test, file = paste(NAMEEE,"_",short_size_window,"kb_VI", sep=""), sep = "\t", row.names = FALSE)
-
+write.table(test, file = paste0(NAMEEE,"_",short_size_window,"kb_VI"), sep = "\t", row.names = FALSE)
 
 
 ##### Graphe different steps LSTs calling procedure #####
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
 B=B[,-1]
 B=B[,-5]
@@ -1299,11 +1274,11 @@ df=as.data.frame(df)
 detach(B)
 
 
-## DEBUT : Normalised and corrected readcount filtered 
+## Normalised read count
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
 Z <- ggplot() +
@@ -1317,26 +1292,22 @@ Z <- Z + theme(axis.title.x = element_blank(),
                axis.ticks.x = element_blank(),
                axis.text.y = element_blank(),
                axis.title.y = element_blank(),
-               # axis.text.y = element_blank(),
-               # axis.ticks.y = element_blank(),
                panel.spacing = unit(0, "lines"),
                strip.text.x = element_blank(),
                line = element_blank(),
                panel.background = element_blank())
 
-suppressWarnings(ggsave(paste("Normalised_Read_Count",NAMEEE,sep=""), plot = Z, device = "jpeg", width = 23, height = 13))
-
-## FIN : Normalised and corrected readcount filtered
+suppressWarnings(ggsave(paste0("Normalised_Read_Count",NAMEEE), plot = Z, device = "jpeg", width = 23, height = 13))
 
 
-##   DEBUT : LSTs pathway
+## Part I
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_I", sep=""), header=TRUE)
+dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_I"), header=TRUE)
 C <- data.frame(dataTable)
 
 I <- ggplot() +
@@ -1351,22 +1322,22 @@ I <- I + theme(axis.title.x = element_text(size=20),
                axis.ticks.x = element_blank(),
                axis.title.y = element_blank(),
                axis.text.y = element_text(size=20),
-               # axis.text.y = element_blank(),
-               # axis.ticks.y = element_blank(),
                panel.spacing = unit(0, "lines"),
                strip.text.x = element_blank(),
                line = element_blank(),
                panel.background = element_blank())
 
-suppressWarnings(ggsave(paste("1_",NAMEEE,sep=""), plot = I, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0("1_",NAMEEE), plot = I, device = "jpeg", width = 23, height = 13))
 
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+# part II
+
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_II", sep=""), header=TRUE)
+dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_II"), header=TRUE)
 C <- data.frame(dataTable)
 
 II <- ggplot() +
@@ -1381,22 +1352,22 @@ II <- II + theme(axis.title.x = element_text(size=20),
                  axis.ticks.x = element_blank(),
                  axis.title.y = element_blank(),
                  axis.text.y = element_text(size=20),
-                 # axis.text.y = element_blank(),
-                 # axis.ticks.y = element_blank(),
                  panel.spacing = unit(0, "lines"),
                  strip.text.x = element_blank(),
                  line = element_blank(),
                  panel.background = element_blank())
 
-suppressWarnings(ggsave(paste("2_",NAMEEE,sep=""), plot = II, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0("2_",NAMEEE), plot = II, device = "jpeg", width = 23, height = 13))
 
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+## part III
+
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_III", sep=""), header=TRUE)
+dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_III"), header=TRUE)
 C <- data.frame(dataTable)
 
 III <- ggplot() +
@@ -1411,8 +1382,6 @@ III <- III + theme(axis.title.x = element_text(size=20),
                    axis.ticks.x = element_blank(),
                    axis.title.y = element_blank(),
                    axis.text.y = element_text(size=20),
-                   # axis.text.y = element_blank(),
-                   # axis.ticks.y = element_blank(),
                    panel.spacing = unit(0, "lines"),
                    strip.text.x = element_blank(),
                    line = element_blank(),
@@ -1421,13 +1390,14 @@ III <- III + theme(axis.title.x = element_text(size=20),
 suppressWarnings(ggsave(paste("3_",NAMEEE,sep=""), plot = III, device = "jpeg", width = 23, height = 13))
 
 
+## part IV
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_IV", sep=""), header=TRUE)
+dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_IV"), header=TRUE)
 C <- data.frame(dataTable)
 
 IV <- ggplot() +
@@ -1442,24 +1412,23 @@ IV <- IV + theme(axis.title.x = element_text(size=20),
                  axis.ticks.x = element_blank(),
                  axis.title.y = element_blank(),
                  axis.text.y = element_text(size=20),
-                 # axis.text.y = element_blank(),
-                 # axis.ticks.y = element_blank(),
                  panel.spacing = unit(0, "lines"),
                  strip.text.x = element_blank(),
                  line = element_blank(),
                  panel.background = element_blank())
 
-suppressWarnings(ggsave(paste("4_",NAMEEE,sep=""), plot = IV, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0("4_",NAMEEE), plot = IV, device = "jpeg", width = 23, height = 13))
 
 
-dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+## part V
+
+dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 B <- data.frame(dataTable)
-B=B[,-1] # remove feature
+B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_V", sep=""), header=TRUE)
+dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_V"), header=TRUE)
 C <- data.frame(dataTable)
-
 
 closest_higlight = Closest(B$start, 30302805)[1]
 
@@ -1488,9 +1457,6 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
                axis.ticks.x = element_blank(),
                axis.title.y = element_blank(),
                axis.text.y = element_text(size=15),
-               # axis.text.y = element_blank(),
-               # axis.ticks.y = element_blank(),
-               # text = element_text(size = 70),
                panel.spacing = unit(0, "lines"),
                strip.text.x = element_blank(),
                line = element_blank(),
@@ -1499,20 +1465,19 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
 V = ggplotGrob(x = V)
 V$layout$clip = "off"
 
-suppressWarnings(ggsave(paste("5_",NAMEEE,sep=""), plot = V, device = "jpeg", width = 23, height = 13))
-
-##  FIN : LSTs pathway
+suppressWarnings(ggsave(paste0("5_",NAMEEE), plot = V, device = "jpeg", width = 23, height = 13))
 
 
-##    DEBUT : LSTs called
+## Part VI : LSTs if called
+
 if (sum(WC[,1]) != 0){
 
-  dataTable <- read.table(paste("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv", sep = ""), header=TRUE)
+  dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
   B <- data.frame(dataTable)
-  B=B[,-1] # remove feature
+  B=B[,-1] 
   colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-  dataTable <- read.table(paste(NAMEEE,"_",short_size_window,"kb_VI", sep=""), header=TRUE)
+  dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_VI"), header=TRUE)
   C <- data.frame(dataTable)
 
   closest_higlight = Closest(B$start, 30302805)[1]
@@ -1534,15 +1499,12 @@ if (sum(WC[,1]) != 0){
     geom_point(data = higlight_CCNE1, aes(x=start, y=ratio_median), color = "orange", size = 2, na.rm=TRUE) +
     geom_text(data = data.text, mapping = aes(x = x, y = y, label = label), size = 4, inherit.aes = TRUE, na.rm=TRUE)
 
-
   VI <- VI + theme(plot.title = element_text(hjust = 0.5),
                  axis.title.x = element_blank(),
                  axis.text.x = element_blank(),
                  axis.ticks.x = element_blank(),
                  axis.title.y = element_blank(),
                  axis.text.y = element_text(size=15),
-                 # axis.text.y = element_blank(),
-                 # axis.ticks.y = element_blank(),
                  panel.spacing = unit(0, "lines"),
                  strip.text.x = element_blank(),
                  line = element_blank(),
@@ -1551,8 +1513,9 @@ if (sum(WC[,1]) != 0){
   VI = ggplotGrob(x = VI)
   VI$layout$clip = "off"
 
-  suppressWarnings(ggsave(paste("6_",NAMEEE,sep=""), plot = VI, device = "jpeg", width = 23, height = 13))
+  suppressWarnings(ggsave(paste0("6_",NAMEEE), plot = VI, device = "jpeg", width = 23, height = 13))
 }
+
 
 ##### Output final figure #####
 ## graphe
@@ -1564,14 +1527,14 @@ if (sum(WC[,1]) != 0){
 
 ## ploidy controlFREEC 
 
-ploidy <- read.table(paste(NAMEEE,".bam_info.txt", sep = ""), header=TRUE)
+ploidy <- read.table(paste0(NAMEEE,".bam_info.txt"), header=TRUE)
 
 ploidy_control = ploidy[10,][2]
 colnames(ploidy_control) <- NULL
 rownames(ploidy_control) <- NULL
 ploidy_test = as.integer(as.character(ploidy_control[[1]]))
 
-## Threhold
+## Threshold
 
 Threshold = round(Threshold, 3)
 
@@ -1626,11 +1589,11 @@ summary_plot <- suppressWarnings(ggarrange(graphe,
                           ggarrange(ploty, test_ploty_CN_level, testy, labels = c("B", "C", "D"), ncol = 3, font.label = list(size = 14, face = "bold")),
                           nrow = 2, labels = "A", font.label = list(size = 14, face = "bold")))
 
-suppressWarnings(ggsave(paste("summary_plot_",NAMEEE,sep=""), plot = summary_plot, device = "jpeg", width = 18, height = 10.17))
+suppressWarnings(ggsave(paste0("summary_plot_",NAMEEE), plot = summary_plot, device = "jpeg", width = 18, height = 10.17))
 
 print("========================================================")
 print("========================================================")
 print("========================================================")
-print(paste("Sample : ", NAMEEE, sep = ""))
-print(paste("Number of LSTs (> 10Mb) : ", number_LSTs, sep = ""))
-print(paste("BRCAness : ", BRCAness, sep = ""))
+paste0("Sample : ", NAMEEE)
+paste0("Number of LSTs (> 10Mb) : ", number_LSTs)
+paste0("BRCAness : ", BRCAness)
