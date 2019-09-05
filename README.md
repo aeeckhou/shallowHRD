@@ -37,7 +37,7 @@ The command line to launch the *shallowHRD* is :
 Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/created/directory
 ```
 
-Two files named example.bam_ratio.txt and example.bam_info.txt are downloadable in the repository to try *shallowHRD*.
+Two files named *example.bam_ratio.txt* and *example.bam_info.txt* are downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
