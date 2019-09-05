@@ -43,7 +43,7 @@ Summary plot :
 A : Genomic profile with LSTs in green (the entire processed segmentation is represented in red if there are no LST) <br/>
 B : Density used to fix the difference between a copy level <br/>
 C : Graphe representing the value of each final segment (small blue circles) - <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the segmentation is good, different should appear clearly <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the segmentation is good, the different copy number should appear clearly <br/>
 D : Table recapitulating different data and the final diagnostic for the HR status
 
 ## Nota Bene
