@@ -29,6 +29,9 @@ BAM files should then be processed by ControlFREEC. The recommended options are 
 
 ## Outputs
 
+## NB
+
+The overall pipeline works also on BAM files with a coverage much more important.
 
 
 ## Publication
