@@ -16,7 +16,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentatio
 
 shallowHRD is a Rscript that can be launched from the command line. It relies on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) (V. Boeava et al., 2011) on sWGS (0.5-2x). 
 
-FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) algorithm) and supplementary and duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicate](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
+First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
 BAM files should then be processed by ControlFREEC. The recommended options are indicated in a config file example in the repository (controlfreec_config_file_example). Briefly, depending on the coverage of the BAM files (0.5-2x), the window size should varies between 20kb and 60kb, with a step size half its length.
 
@@ -29,10 +29,12 @@ BAM files should then be processed by ControlFREEC. The recommended options are 
 
 ## Outputs
 
-## NB
+## Nota Bene
 
-The overall pipeline works also on BAM files with a coverage much more important.
+1. The overall pipeline works also on BAM files with a coverage much more important.
+2. The shallowHRD R script can be adapted to over kind of segmentation outputs ([QDNAseq](https://github.com/ccagc/QDNAseq) for instance)
 
+## Contact
 
 ## Publication
 
