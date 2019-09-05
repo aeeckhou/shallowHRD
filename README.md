@@ -24,7 +24,7 @@ Then, the BAM file should then be processed by ControlFREEC. The recommended opt
 
 Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
 
-The packages can be installed with the script *install_packages.R* (available in repository) and the command line :
+The R packages can be installed with the script *install_packages.R* (available in repository) and the command line :
 
 ```
 Rscript install.packages.R
