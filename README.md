@@ -38,6 +38,11 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example)
 
+A : Genomic profile with LSTs in green (if there no LSTs in the case, the entire processed segmentation is represented in red <br/>
+B : Density used to fix the difference between a copy level <br/>
+C : Graphe representing the value of each final segment - if the segmentation is good, different should appear clearly <br/>
+D : Table recapitulating different data and the final diagnostic for the HR status
+
 ## Nota Bene
 
 1. The overall pipeline works also on BAM files with a coverage much more important.
