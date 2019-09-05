@@ -36,7 +36,7 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ## Outputs
 
-
+![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example)
 
 ## Nota Bene
 
