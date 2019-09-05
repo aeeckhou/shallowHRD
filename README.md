@@ -34,10 +34,6 @@ The command line to launch the shallowHRD is :
 Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/created/directory
 ```
 
-## (Results)
-
-
-
 ## Outputs
 
 
