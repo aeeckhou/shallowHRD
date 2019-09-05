@@ -8,7 +8,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and a segmentation 
 
 ## Requirements
 
-* R installed (tested v.3.5.1)
+* R installed (tested with v.3.5.1)
 * Linux
 * The following packages installed : 
   * ggpubr (tested with v.0.2.3)
