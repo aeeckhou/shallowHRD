@@ -16,10 +16,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and its segmentatio
 
 shallowHRD is a Rscript that can be launched from the command line. It relies on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) (V. Boeava et al., 2011). 
 
-###### Pre-processing
-
-FASTQ files should be aligned to the hg19 (using [bwa-mem](https://github.com/lh3/bwa) algorithm). Then, The supplementary alignements and duplicates reads should be removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicate](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) respectively.
-
+FASTQ files should be aligned to the hg19 (using [bwa-mem](https://github.com/lh3/bwa) algorithm). Then, supplementary and duplicate reads should be removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicate](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) respectively.
 
 
 ## Outputs
