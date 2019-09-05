@@ -39,9 +39,9 @@ Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/folder/contaning/creat
 
 ## Outputs
 
-All the files will be created in the SAMPLE_NAME directory. 
+All the figures and files created by the script will be available in the SAMPLE_NAME directory. 
 
-The summary plot recapitulating all the information will be in this format :
+The summary plot figure recapitulating all the information will look like this :
 
 ![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example)
 
