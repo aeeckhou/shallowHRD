@@ -36,7 +36,7 @@ To run *shallowHRD*, two files of the ControlFREEC's output are needed : the rat
 
 Create a directory named after your sample (SAMPLE_NAME in the format example) and put the ratio and info file inside. 
 
-The command line to launch *shallowHRD* is :
+The command line to launch *shallowHRD* is (absolute paths) :
 
 ```
 Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /path/to/created/directory /path/to/file/cytoBand_adapted_fr_hg19.csv
