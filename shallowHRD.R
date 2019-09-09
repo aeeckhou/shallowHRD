@@ -810,6 +810,8 @@ write.table(A, file = paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.tx
 
 options(show.error.messages = TRUE)
 
+noquote("on going...")
+
 ##### Find Threshold #####
 
 X = read.table(paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.txt"), sep = "\t", header = TRUE)
@@ -1201,6 +1203,7 @@ tmp_3mb<-breakSmoothToLST(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_po
 
 write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_V"), sep = "\t", row.names = FALSE)
 
+noquote("on going...")
 
 ##### Graphe final segmentation diag #####
 
@@ -1389,6 +1392,7 @@ III <- III + theme(axis.title.x = element_text(size=20),
 
 suppressWarnings(ggsave(paste("3_",NAMEEE,sep=""), plot = III, device = "jpeg", width = 23, height = 13))
 
+noquote("on going...")
 
 ## part IV
 
