@@ -55,7 +55,7 @@ The summary plot figure recapitulating all the information will look like this :
 A : Genomic profile with LSTs in green (the entire processed segmentation is represented in red if there are no LST) <br/>
 B : Density used to fix the difference between a copy level <br/>
 C : Graphe representing the value of each final segment (small blue circles) - <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the segmentation is good, the different copy number should appear clearly <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the segmentation is good, the different copy number should appear clearly with disctinct steps <br/>
 D : Table recapitulating different data and the final diagnostic for the HR status
 
 ## Nota Bene
@@ -65,6 +65,8 @@ D : Table recapitulating different data and the final diagnostic for the HR stat
 3. The ploidy provided by ControlFREEC is just an indication and should only be taken as such
 
 ## Contact
+
+Don't hesitate to contact us !
 
 alexandre.eeckhoutte@curie.fr <br/>
 tatiana.popova@curie.fr <br/>
