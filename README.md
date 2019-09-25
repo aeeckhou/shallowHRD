@@ -14,6 +14,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and a segmentation 
   * gridExtra (tested with v.2.3)
   * DescTools (tested with v.0.99.28)
 
+Test on Linux and Mac.
 
 ## Prerequisities
 
