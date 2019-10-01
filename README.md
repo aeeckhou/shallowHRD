@@ -60,9 +60,10 @@ D : Table recapitulating different data and the final diagnostic for the HR stat
 
 ## Nota Bene
 
-1. The overall pipeline works also on BAM files with a coverage much more important
-2. The *shallowHRD* script can be adapted to other segmentation outputs ([QDNAseq](https://github.com/ccagc/QDNAseq) for instance)
-3. The ploidy provided by ControlFREEC is just an indication and should only be taken as such
+1. The overall pipeline works also on WGS with a higher coverage
+
+2. *shallowHRD* can be adapted to other segmentation outputs ([QDNAseq](https://github.com/ccagc/QDNAseq) for instance)
+Format : Chromosome Start Ratio MedianRatio CopyNumber
 
 ## Contact
 
