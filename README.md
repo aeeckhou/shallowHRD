@@ -32,9 +32,9 @@ Rscript install.packages.R
 
 ## Run *shallowHRD*
 
-To run *shallowHRD*, two files of the ControlFREEC's output are needed : the ratio and the info file. The names of the files should be in this format : *SAMPLE_NAME.bam_ratio.txt* and *SAMPLE_NAME.bam_info.txt*. 
+To run *shallowHRD*, only the ratio file of the ControlFREEC's output is needed. The names of the file should be in this format : *SAMPLE_NAME.bam_ratio.txt*. 
 
-Create a directory named after your sample (SAMPLE_NAME in the format example) and put the ratio and info file inside. 
+Create a directory named after your sample (SAMPLE_NAME in the format example) and put the ratio file inside. 
 
 The command line to launch *shallowHRD* is (**absolute** paths) :
 
@@ -42,7 +42,7 @@ The command line to launch *shallowHRD* is (**absolute** paths) :
 Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /absolute/path/to/created/directory /absolute/path/to/file/cytoBand_adapted_fr_hg19.csv
 ```
 
-Two files named *example.bam_ratio.txt* and *example.bam_info.txt* are downloadable in the repository to try *shallowHRD*.
+One file named *example.bam_ratio.txt* is downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
