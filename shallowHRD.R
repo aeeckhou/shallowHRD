@@ -427,10 +427,15 @@ ratio <- data.frame(dataTable)
 
 short_size_window = size_window/1000
 
-write.table(ratio, file = paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv") , row.names = FALSE, col.names = TRUE, sep = "\t")
 
-X=read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE, sep = "\t")            
+# to save
+# write.table(ratio, file = paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv") , row.names = FALSE, col.names = TRUE, sep = "\t")
+# read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE, sep = "\t")            
 
+X=ratio
+
+ratio_file_tsv = ratio
+  
 X=X[,-1] 
 X=X[,-4] 
 
@@ -806,7 +811,7 @@ A=subset(A, A[,1] != 0)
 rownames(A) <- NULL 
 colnames(A) <- c("chr", "chr_arm", "start", "end", "ratio_median", "size")
 
-write.table(A, file = paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.txt"), sep = "\t", row.names = FALSE)
+write.table(A, file = paste0(NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", row.names = FALSE)
 
 options(show.error.messages = TRUE)
 
@@ -814,7 +819,8 @@ noquote("on going...")
 
 ##### Find Threshold #####
 
-X = read.table(paste0(NAMEEE,"_medianratio_gatheredR_automatized_final.txt"), sep = "\t", header = TRUE)
+X = read.table(paste0(NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", header = TRUE)
+
 X = X[which(X[,6] > 2999999),]
 
 X = X[which(X[,6] > ((quantile(X[,6])[[4]] - quantile(X[,6])[[2]])/2)),]   
@@ -851,7 +857,7 @@ ggsave(paste0(NAMEEE,"_THR"), plot = ploty, device = "jpeg", width = 20, height 
 
 ##### Reading and initialisation #####
 
-segFiles <- list.files(inputPath, pattern="automatized_final.txt",full.names=T) 
+segFiles <- list.files(inputPath, pattern="gathered.txt",full.names=T) 
 
 fileNames <- gsub(inputPath,"",segFiles) 
 fileNames <- gsub("proc_","",fileNames) 
@@ -888,8 +894,9 @@ colnames(tmp)[1]<-c("index")
 tmp <- cbind(tmp,rep(0,nrow(tmp))) 
 colnames(tmp)[8]<-c("level")
 
-write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_I"), sep = "\t", row.names = FALSE)  
-
+# to save
+# write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_I"), sep = "\t", row.names = FALSE)  
+graphe_I_tab = tmp
 
 tt<-which(tmp[,c_chr+1]>23.6)                            # exclusion chr24 and more   
 if(length(tt)>0){tmp<-tmp[-tt,]}
@@ -900,7 +907,9 @@ if(length(tt)>0){tmp<-tmp[-tt,]}
 tt<-which(tmp[,c_chr+1]==22)                             # exclusion short arm chr22
 if(length(tt)>0){tmp<-tmp[-tt,]}
 
-write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_II"), sep = "\t", row.names = FALSE) # no chr_amr p 21 22 et plus de 24
+# to save
+# write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_II"), sep = "\t", row.names = FALSE) # no chr_amr p 21 22 et plus de 24
+graphe_II_tab = tmp
 
 tmp[,7] = tmp[,5] - tmp[,4] + 1
 
@@ -1005,8 +1014,10 @@ rownames(A) <- NULL
 colnames(A) <- c("index", "chr", "chr_arm", "start", "end", "ratio_median", "size", "level")
 
 tmp_3mb=A
-write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_III"), sep = "\t", row.names = FALSE) 
 
+# to save
+# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_III"), sep = "\t", row.names = FALSE) 
+graphe_III_tab = tmp_3mb 
 
 ##### Reput small segment & Smoothing #####
 
@@ -1197,11 +1208,15 @@ while (i < l_0.1_3mb + 1){
 
 options(show.error.messages = TRUE)
 
-write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_IV"), sep = "\t", row.names = FALSE)
+# to save
+# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_IV"), sep = "\t", row.names = FALSE)
+graphe_IV_tab = tmp_3mb
 
 tmp_3mb<-breakSmoothToLST(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
-write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_V"), sep = "\t", row.names = FALSE)
+# to save
+# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_V"), sep = "\t", row.names = FALSE)
+graphe_V_tab = tmp_3mb
 
 noquote("on going...")
 
@@ -1260,13 +1275,16 @@ if (is.null(l) == FALSE){
   test=test[-l,]
 }
 
-write.table(test, file = paste0(NAMEEE,"_",short_size_window,"kb_VI"), sep = "\t", row.names = FALSE)
-
+# to save
+# write.table(test, file = paste0(NAMEEE,"_",short_size_window,"kb_VI"), sep = "\t", row.names = FALSE)
+graphe_VI_tab = test
 
 ##### Graphe different steps LSTs calling procedure #####
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+
+B <- data.frame(ratio_file_tsv)
 B=B[,-1]
 B=B[,-5]
 colnames(B) <- c("chr", "start", "end", "readcount")
@@ -1279,8 +1297,10 @@ detach(B)
 
 ## Normalised read count
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
@@ -1305,20 +1325,22 @@ suppressWarnings(ggsave(paste0("Normalised_Read_Count",NAMEEE), plot = Z, device
 
 ## Part I
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_I"), header=TRUE)
-C <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_I"), header=TRUE)
+# C <- data.frame(dataTable)
+C <- data.frame(graphe_I_tab)
+
 
 I <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") +
+  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
   geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
   ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
-  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
+  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x") 
 
 I <- I + theme(axis.title.x = element_text(size=20),
                axis.text.x = element_blank(),
@@ -1335,17 +1357,22 @@ suppressWarnings(ggsave(paste0("1_",NAMEEE), plot = I, device = "jpeg", width = 
 
 # part II
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+# B <- data.frame(dataTable)
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_II"), header=TRUE)
-C <- data.frame(dataTable)
+# if saving 
+# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_II"), header=TRUE)
+# C <- data.frame(dataTable)
+
+C <- data.frame(graphe_II_tab)
 
 II <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") +
+  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
   geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
   ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
   facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
@@ -1365,17 +1392,19 @@ suppressWarnings(ggsave(paste0("2_",NAMEEE), plot = II, device = "jpeg", width =
 
 ## part III
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+# B <- data.frame(dataTable)
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_III"), header=TRUE)
-C <- data.frame(dataTable)
+# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_III"), header=TRUE)
+# C <- data.frame(dataTable)
+C <- data.frame(graphe_III_tab)
 
 III <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") +
+  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
   geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
   ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
   facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
@@ -1396,17 +1425,22 @@ noquote("on going...")
 
 ## part IV
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+# B <- data.frame(dataTable)
+
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_IV"), header=TRUE)
-C <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_IV"), header=TRUE)
+# C <- data.frame(dataTable)
+C <- data.frame(graphe_IV_tab)
+
 
 IV <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") +
+  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
   geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
   ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
   facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
@@ -1426,13 +1460,18 @@ suppressWarnings(ggsave(paste0("4_",NAMEEE), plot = IV, device = "jpeg", width =
 
 ## part V
 
-dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-B <- data.frame(dataTable)
+# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+# B <- data.frame(dataTable)
+
+B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_V"), header=TRUE)
-C <- data.frame(dataTable)
+# if saving
+# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_V"), header=TRUE)
+# C <- data.frame(dataTable)
+
+C <- data.frame(graphe_V_tab)
 
 closest_higlight = Closest(B$start, 30302805)[1]
 
@@ -1481,15 +1520,21 @@ suppressWarnings(ggsave(paste0("5_",NAMEEE), plot = V, device = "jpeg", width = 
 ## Part VI : LSTs if called
 
 if (sum(WC[,1]) != 0){
-
-  dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-  B <- data.frame(dataTable)
+  
+  # if saving
+  # dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
+  # B <- data.frame(dataTable)
+  
+  B <- data.frame(ratio_file_tsv)
   B=B[,-1] 
   colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
-
-  dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_VI"), header=TRUE)
-  C <- data.frame(dataTable)
-
+  
+  # if saving
+  # dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_VI"), header=TRUE)
+  # C <- data.frame(dataTable)
+  
+  C <- data.frame(graphe_VI_tab)
+  
   closest_higlight = Closest(B$start, 30302805)[1]
   
   higlight_CCNE1 = B[B$chr == 19 & B$start == closest_higlight,]
@@ -1542,15 +1587,6 @@ if (sum(WC[,1]) != 0){
   graphe = VI
 }
 
-## ploidy controlFREEC 
-
-ploidy <- read.table(paste0(NAMEEE,".bam_info.txt"), header=TRUE)
-
-ploidy_control = ploidy[10,][2]
-colnames(ploidy_control) <- NULL
-rownames(ploidy_control) <- NULL
-ploidy_test = as.integer(as.character(ploidy_control[[1]]))
-
 ## Threshold
 
 Threshold = round(Threshold, 3)
@@ -1589,16 +1625,19 @@ if (number_LSTs >= 18){
 
 ## Table
 
-a = c("Ploidy ControlFREEC", "Threshold value","Threshold corrected","Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "BRCAness")
-b = c(ploidy_test, Threshold, THR, number_LSTs, CN_plus_baseline, CCNE1_diag, BRCAness)
+a = c("Threshold value","Threshold corrected","Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "BRCAness")
+b = c(Threshold, THR, number_LSTs, CN_plus_baseline, CCNE1_diag, BRCAness)
+
 A = data.frame(a,b)
 
 colnames(A) <- NULL
 row.names(A) <- NULL
 
 testy <- qplot(1:10, 1:10, geom = "blank") + 
-  theme(line = element_blank(), text = element_blank(), panel.background = element_blank()) +
-  annotation_custom(grob = tableGrob(A, rows = NULL))
+  theme(line = element_blank(), text = element_blank(), 
+        panel.background = element_blank()) +
+  annotation_custom(grob = tableGrob(A, rows = NULL, theme = ttheme_default(base_size = 14, base_colour = "black", base_family = "",
+                                                                    parse = FALSE)))
 
 ## Summary figure
 
@@ -1606,7 +1645,7 @@ summary_plot <- suppressWarnings(ggarrange(graphe,
                           ggarrange(ploty, test_ploty_CN_level, testy, labels = c("B", "C", "D"), ncol = 3, font.label = list(size = 14, face = "bold")),
                           nrow = 2, labels = "A", font.label = list(size = 14, face = "bold")))
 
-suppressWarnings(ggsave(paste0("summary_plot_",NAMEEE), plot = summary_plot, device = "jpeg", width = 18, height = 10.17))
+suppressWarnings(ggsave(paste0("summary_plot_",NAMEEE), plot = summary_plot, device = "jpeg", width = 18, height = 10.17, dpi = 1200))
 
 print("========================================================")
 print("========================================================")
