@@ -66,7 +66,7 @@ D : Table recapitulating different data and the final diagnostic for the HR stat
 
 ## Contact
 
-Don't hesitate to contact us !
+Don't hesitate to contact us for any bugs, questions or adaptation of the method !
 
 alexandre.eeckhoutte@curie.fr <br/>
 tatiana.popova@curie.fr <br/>
