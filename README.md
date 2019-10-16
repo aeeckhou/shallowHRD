@@ -35,7 +35,8 @@ Rscript install.packages.R
 To run *shallowHRD* only one ratio file is needed (formated for ControlFREEC's output).
 
 The name of the table should be in this format : *SAMPLE_NAME.bam_ratio.txt*. <br/>
-*shallowHRD* will rely on the first four columns table (tabulated and Chromosome in number) : <br/>
+
+*shallowHRD* will rely on the *first four columns* of the input table (tabulated and Chromosome in number) : <br/>
 Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 1 &nbsp;&nbsp; 1 &nbsp;&nbsp; -1 &nbsp;&nbsp; -1 <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
