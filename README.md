@@ -88,4 +88,5 @@ marc-henri.stern@curie.fr
 
 Submitted to __________.
 
-"ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" A. Eeckhoutte et al., 2019
+"ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" <br/> 
+A. Eeckhoutte et al., 2019
