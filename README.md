@@ -59,7 +59,7 @@ All the figures and files created by the script will be available in the created
 
 The summary plot figure recapitulating all the information will look like this :
 
-![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example)
+![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/summary_plot_example.jpeg)
 
 A : Genomic profile with LSTs in green (the entire processed segmentation is represented in red if there are no LST) <br/>
 B : Density used to fix the difference between a copy level <br/>
