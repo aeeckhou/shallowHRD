@@ -4,9 +4,9 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and the segmentatio
 
 ## Introduction
 
-*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (Boeva,V. et al., 2011) but is adapted to other similar software aswell (see run shallowHRD and Nota Bene). 
+*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (Boeva,V. et al., 2011) but is adapted to other similar software aswell (see sections "run shallowHRD" and "Nota Bene"). 
 
-Softwares such as ControlFREEC count reads in sliding windows, correct this read count for GCcontent and low mappability windows and segment the genomic profile. Then *shallowHRD*, based on a inferred cut-off representing a one copy difference, smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale State Transitions (LSTs) along the genome.
+Softwares such as ControlFREEC count reads in sliding windows, correct the read count for GCcontent and low mappability region and then segment the genomic profile. *shallowHRD*, based on a inferred cut-off representing a one copy difference, will smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale State Transitions (LSTs) along the genome.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ Tested on Linux and Mac.
 
 First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
-Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example*). The window size was fixed here to 20kb (=> 0.5x) and the segmentation set up to be sensitive. The window size can however be increased to ~60kb, with a step size half its length depending on the coverage.
+Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example*). The window size was fixed here to 20kb (coverage > 0.5x) and the parameters were set for a sensitive segmentation. The window size can be increased up to ~60kb, with a step size half its length depending on the coverage.
 
 Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
 
@@ -45,7 +45,7 @@ Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 
-The command line to launch *shallowHRD* is (it can be in absolute or relative path) :
+The command line to launch *shallowHRD* is (absolute or relative paths) :
 
 ```
 /path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
@@ -55,7 +55,7 @@ One file named *example.bam_ratio.txt* is downloadable in the repository to try 
 
 ## Outputs
 
-All the figures and files created by the script will be available in the created directory SAMPLE_NAME. 
+All the figures and files created by the script will be available in the output directory.
 
 The summary plot figure recapitulating all the information will look like this :
 
@@ -65,13 +65,15 @@ A : Genomic profile with LSTs in green (the entire processed segmentation is rep
 B : Density used to fix the difference between a copy level <br/>
 C : Graphe representing the value of each final segment (small blue circles) - <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the segmentation is good, the different copy number should appear clearly with disctinct steps <br/>
-D : Table recapitulating different data and the final diagnostic for the HR status
+D : Table recapitulating different data, including the case quality and the final diagnostic for the HR status
 
 ## Nota Bene
 
 1. The overall pipeline works also on WGS with a higher coverage
 
-2. *shallowHRD* can be adapted to other segmentation outputs ([QDNAseq](https://github.com/ccagc/QDNAseq) for instance) <br/>
+2. *shallowHRD* can be adapted to other segmentation outputs <br/> 
+[QDNAseq](https://github.com/ccagc/QDNAseq) for instance : just comment the two script's lines for the log2 transformation of the data <br/>
+(line 427 + 428 - sub-section "Fast gathering" of shallowHRD.R - 10/17/2019)
 
 ## Contact
 
