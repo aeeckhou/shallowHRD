@@ -41,7 +41,7 @@ The name of the file should be in this format : *SAMPLE_NAME.bam_ratio.txt*. <br
 *shallowHRD* will rely on the *first four columns* of the input file (tabulated and with Chromosome in number !) : <br/>
 Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 1 &nbsp;&nbsp; 1 &nbsp;&nbsp; -1 &nbsp;&nbsp; -1 <br/>
-. &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
+1 &nbsp;&nbsp; 20001 &nbsp;&nbsp; -1 &nbsp;&nbsp; -1 <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 
