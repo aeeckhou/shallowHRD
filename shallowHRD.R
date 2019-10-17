@@ -2,16 +2,19 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
-NAMEEE = args[1]
-path = args[2]
-hg19_cyto = args[3]
+path_to_ratio_file = args[1]
+inputPath = normalizePath(dirname(path_to_ratio_file))
 
-setwd(paste0(path))
+NAMEEE_intermediary = sub("*/*.bam_ratio.txt", "", normalizePath(path_to_ratio_file))
+NAMEEE = sub(".*/", "", NAMEEE_intermediary)
 
-pPath<-paste0(path)
-outputPath<-paste(pPath)
-inputPath<-paste0(path)
 
+output_relative_Path = args[2]
+outputPath = normalizePath(output_relative_Path)
+
+
+path_to_cyto = args[3]
+cytoFile = normalizePath(path_to_cyto)
 
 ##### Avoid error problem in command line #####
 
@@ -23,7 +26,7 @@ options(error=continue_on_error)
 
 ##### Cytoband_hg19 #####
 
-cyt_Annot<-read.csv(hg19_cyto,header=T,fill=T)
+cyt_Annot<-read.csv(cytoFile,header=T,fill=T)
 
 cyt_Annot<-cyt_Annot[,1:6]
 for(k in 2:dim(cyt_Annot)[[1]]){
@@ -121,7 +124,7 @@ getSegmentID<-function(THR,tmp,c_chr,c_cn,c_conf){
   } 
   
   out<-tmp
-
+  
 }
 
 
@@ -145,7 +148,7 @@ shrinkReprTMP<-function(tmp,c_posS,c_posE,c_cn,c_conf){
   
   tt<-which(tmp[,1]==0);if(length(tt)!=0){tmp<-tmp[-tt,]}
   out<-tmp
-
+  
 }
 
 
@@ -185,7 +188,7 @@ getInfoSegm<-function(infoString){
 ## SmoothBreaks_SNP
 
 smoothBreaksLength<-function(THR,Length,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
-
+  
   tmp<-getSegmentID(THR=THR,tmp=tmp,c_chr=c_chr+1,c_cn=c_cn,c_conf=c_conf)
   tmp<-shrinkReprTMP(tmp=tmp,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
   
@@ -325,7 +328,7 @@ breakSmoothToLST<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
 ## LST_control
 
 LST_control<-function(THR,lenBIN,lenMB,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
-
+  
   tmp[,c_ind]<-seq(1,dim(tmp)[[1]])
   
   
@@ -343,7 +346,7 @@ LST_control<-function(THR,lenBIN,lenMB,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c
         if(abs(tmp[k,c_cn]-tmp[k-1,c_cn])>THR*coefficient){WC[k]<-1}
         
       }
-
+      
     }
   }
   
@@ -397,11 +400,11 @@ ShortIntestBreaksSmooth<-function(THR,lenMB,tmp,c_ind=c_ind,c_chr=c_chr,c_posS=c
 
 ##### Fast ControlFREEC gathering #####
 
-dataTable <- read.table(paste0(pPath,"/",NAMEEE,".bam_ratio.txt"), header = TRUE)
-dataTable = dataTable[,-5]
+dataTable <- read.table(paste0(inputPath,"/",NAMEEE,".bam_ratio.txt"), header = TRUE)
+dataTable = dataTable[,1:4]
 
-dataTable = dataTable[which(!dataTable$Chromosome == "X"),] 
-dataTable = dataTable[which(!dataTable$Chromosome == "Y"),] 
+dataTable = dataTable[which(!dataTable[,1] == "X"),] 
+dataTable = dataTable[which(!dataTable[,1] == "Y"),] 
 
 dataTable[,1] = as.numeric(as.character(dataTable[,1]))
 
@@ -420,6 +423,7 @@ colnames(dataTable) = c("feature", "chromosome", "start", "end", "ratio", "ratio
 dataTable = dataTable[which(!dataTable$ratio == -1),]
 dataTable = dataTable[which(!dataTable$ratio_median == -1),]
 
+# QDNAseq data : comment two next lines (log2 transform already in QDNAseq)
 dataTable[,5] = log2(dataTable[,5])
 dataTable[,6] = log2(dataTable[,6])
 
@@ -427,16 +431,11 @@ ratio <- data.frame(dataTable)
 
 short_size_window = size_window/1000
 
-
-# to save
-# write.table(ratio, file = paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv") , row.names = FALSE, col.names = TRUE, sep = "\t")
-# read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE, sep = "\t")            
-
 X=ratio
 
-ratio_file_tsv = ratio
-  
-X=X[,-1] 
+ratio_file_tsv = ratio # save in the moment
+
+X=X[,-1] # feature
 X=X[,-4] 
 
 ## Remove spurious regions based on telomere and centromere from UCSC
@@ -811,15 +810,15 @@ A=subset(A, A[,1] != 0)
 rownames(A) <- NULL 
 colnames(A) <- c("chr", "chr_arm", "start", "end", "ratio_median", "size")
 
-write.table(A, file = paste0(NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", row.names = FALSE)
+write.table(A, file = paste0(outputPath,"/",NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", row.names = FALSE)
 
 options(show.error.messages = TRUE)
 
-noquote("on going...")
+cat("on going... \n")
 
 ##### Find Threshold #####
 
-X = read.table(paste0(NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", header = TRUE)
+X = read.table(paste0(outputPath,"/",NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", header = TRUE)
 
 X = X[which(X[,6] > 2999999),]
 
@@ -852,12 +851,12 @@ ploty <- ggplot(test, aes(x = test)) + geom_density() +
         axis.text.y = element_text(size=15),
         axis.title.y = element_blank(),
         panel.background = element_blank())
-ggsave(paste0(NAMEEE,"_THR"), plot = ploty, device = "jpeg", width = 20, height = 10)
+ggsave(paste0(outputPath,"/",NAMEEE,"_THR",".jpeg"), plot = ploty, device = "jpeg", width = 20, height = 10)
 
 
 ##### Reading and initialisation #####
 
-segFiles <- list.files(inputPath, pattern="gathered.txt",full.names=T) 
+segFiles <- list.files(outputPath, pattern="gathered.txt",full.names=T) 
 
 fileNames <- gsub(inputPath,"",segFiles) 
 fileNames <- gsub("proc_","",fileNames) 
@@ -865,7 +864,6 @@ fileNames <- gsub(".txt","",fileNames)
 fileNames <- gsub("/","",fileNames) 
 
 nSample<-1
-nSample<-length(segFiles)
 
 coefficient = 1.0
 
@@ -894,8 +892,6 @@ colnames(tmp)[1]<-c("index")
 tmp <- cbind(tmp,rep(0,nrow(tmp))) 
 colnames(tmp)[8]<-c("level")
 
-# to save
-# write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_I"), sep = "\t", row.names = FALSE)  
 graphe_I_tab = tmp
 
 tt<-which(tmp[,c_chr+1]>23.6)                            # exclusion chr24 and more   
@@ -907,8 +903,6 @@ if(length(tt)>0){tmp<-tmp[-tt,]}
 tt<-which(tmp[,c_chr+1]==22)                             # exclusion short arm chr22
 if(length(tt)>0){tmp<-tmp[-tt,]}
 
-# to save
-# write.table(tmp, file = paste0(NAMEEE,"_",short_size_window,"kb_II"), sep = "\t", row.names = FALSE) # no chr_amr p 21 22 et plus de 24
 graphe_II_tab = tmp
 
 tmp[,7] = tmp[,5] - tmp[,4] + 1
@@ -918,7 +912,7 @@ cop_tmp = tmp_3mb
 THR=Threshold
 
 if (THR > 0.45){
-  THR = 0.28}
+  THR = 0.45}
 
 if (THR < 0.025){
   THR = 0.025
@@ -1015,11 +1009,9 @@ colnames(A) <- c("index", "chr", "chr_arm", "start", "end", "ratio_median", "siz
 
 tmp_3mb=A
 
-# to save
-# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_III"), sep = "\t", row.names = FALSE) 
 graphe_III_tab = tmp_3mb 
 
-##### Reput small segment & Smoothing #####
+##### Reput small segment & Smoothing to final segmentation #####
 
 options(show.error.messages = FALSE)
 
@@ -1066,7 +1058,7 @@ while (i < l_0.1_3mb + 1){
   while (c < L_3mb+1){                                                            
     if (tmp_0.1_3mb[i,3] == tmp_3mb[c,3]){                                            
       if (tmp_0.1_3mb[i,5] < tmp_3mb[c,4]){                         ############### 1 - Before all segments chr_arm
-        if (c==1){ # 
+        if (c==1){  
           if (abs(tmp_0.1_3mb[i,6] - tmp_3mb[c,6]) > THR){          # No gathering 
             tmp_3mb=rbind(c(tmp_0.1_3mb[i,1],tmp_0.1_3mb[i,2],tmp_0.1_3mb[i,3],tmp_0.1_3mb[i,4],tmp_0.1_3mb[i,5], 
                             tmp_0.1_3mb[i,6],tmp_0.1_3mb[i,5]-tmp_0.1_3mb[i,4]+1, tmp_0.1_3mb[i,8]) , tmp_3mb[c:L_3mb,])
@@ -1208,26 +1200,21 @@ while (i < l_0.1_3mb + 1){
 
 options(show.error.messages = TRUE)
 
-# to save
-# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_IV"), sep = "\t", row.names = FALSE)
 graphe_IV_tab = tmp_3mb
 
 tmp_3mb<-breakSmoothToLST(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
-# to save
-# write.table(tmp_3mb, file = paste0(NAMEEE,"_",short_size_window,"kb_V"), sep = "\t", row.names = FALSE)
 graphe_V_tab = tmp_3mb
 
-noquote("on going...")
+cat("on going... \n")
 
-##### Graphe final segmentation diag #####
+## graphe representative of the final segmentation 
 
 test_data_frame = as.data.frame(tmp_3mb)
 colnames(test_data_frame) <- make.unique(names(test_data_frame))
 
 test_ordered = test_data_frame[order(test_data_frame$ratio_median),]
 test_ordered$num_line <- seq.int(nrow(test_ordered))
-
 
 test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line)) + 
   geom_point(shape = 1, size = 1, color = "#0072B2", na.rm = TRUE) + geom_line() + ggtitle("Final segmentation diagnostic") + 
@@ -1238,7 +1225,7 @@ test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line))
         axis.text.y = element_text(size=15),
         axis.title.y = element_blank(),
         panel.background = element_blank())
-suppressWarnings(ggsave(paste0(NAMEEE,"_test_ploty_CN_level"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation_visual",".jpeg"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
 
 
 ##### Call LSTs #####
@@ -1250,7 +1237,7 @@ colnames(LSTs_data_frame) <- c("Size_LST", "Number_LST")
 for (i in (3:11)){
   WC<-LST_control(THR,lenBIN=500,lenMB=i,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
   LSTs_data_frame[i-2,2] = sum(WC[,1])}
-write.table(LSTs_data_frame, file = paste0(NAMEEE,"_LSTs"), sep = "\t", row.names = FALSE)
+write.table(LSTs_data_frame, file = paste0(outputPath,"/",NAMEEE,"_number_LSTs"), sep = "\t", row.names = FALSE)
 
 # For graphe 10Mb 
 
@@ -1275,14 +1262,9 @@ if (is.null(l) == FALSE){
   test=test[-l,]
 }
 
-# to save
-# write.table(test, file = paste0(NAMEEE,"_",short_size_window,"kb_VI"), sep = "\t", row.names = FALSE)
 graphe_VI_tab = test
 
 ##### Graphe different steps LSTs calling procedure #####
-
-# if saving
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
 
 B <- data.frame(ratio_file_tsv)
 B=B[,-1]
@@ -1297,52 +1279,18 @@ detach(B)
 
 ## Normalised read count
 
-# if saving
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-
 B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
 Z <- ggplot() +
-  geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey80") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, na.rm=TRUE) + ylim(-2, 2) +
-  scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
-  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
-
-Z <- Z + theme(axis.title.x = element_blank(),
-               axis.text.x = element_blank(),
-               axis.ticks.x = element_blank(),
-               axis.text.y = element_blank(),
-               axis.title.y = element_blank(),
-               panel.spacing = unit(0, "lines"),
-               strip.text.x = element_blank(),
-               line = element_blank(),
-               panel.background = element_blank())
-
-suppressWarnings(ggsave(paste0("Normalised_Read_Count",NAMEEE), plot = Z, device = "jpeg", width = 23, height = 13))
-
-
-## Part I
-
-B <- data.frame(ratio_file_tsv)
-B=B[,-1] 
-colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
-
-# if saving
-# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_I"), header=TRUE)
-# C <- data.frame(dataTable)
-C <- data.frame(graphe_I_tab)
-
-
-I <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
-  geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
-  ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
+  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "black") + ggtitle(NAMEEE) +
+  ylim(-2, 2) + scale_x_continuous(expand = c(0, 0)) + 
   facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x") 
 
-I <- I + theme(axis.title.x = element_text(size=20),
+Z <- Z + theme(plot.title = element_text(hjust = 0.5),
+               axis.title.x = element_blank(),
                axis.text.x = element_blank(),
                axis.ticks.x = element_blank(),
                axis.title.y = element_blank(),
@@ -1352,124 +1300,47 @@ I <- I + theme(axis.title.x = element_text(size=20),
                line = element_blank(),
                panel.background = element_blank())
 
-suppressWarnings(ggsave(paste0("1_",NAMEEE), plot = I, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_normalised_read_count",".jpeg"), plot = Z, device = "jpeg", width = 23, height = 13))
 
 
-# part II
+## Part I
 
-# if saving
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-# B <- data.frame(dataTable)
 B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
-# if saving 
-# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_II"), header=TRUE)
-# C <- data.frame(dataTable)
+C <- data.frame(graphe_I_tab)
 
-C <- data.frame(graphe_II_tab)
 
-II <- ggplot() +
+I <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
   geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
   geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
-  ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
-  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
+  ylim(-2, 2) + scale_x_continuous(expand = c(0, 0)) + 
+  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x") 
 
-II <- II + theme(axis.title.x = element_text(size=20),
-                 axis.text.x = element_blank(),
-                 axis.ticks.x = element_blank(),
-                 axis.title.y = element_blank(),
-                 axis.text.y = element_text(size=20),
-                 panel.spacing = unit(0, "lines"),
-                 strip.text.x = element_blank(),
-                 line = element_blank(),
-                 panel.background = element_blank())
+I <- I + theme(plot.title = element_text(hjust = 0.5),
+               axis.title.x = element_blank(),
+               axis.text.x = element_blank(),
+               axis.ticks.x = element_blank(),
+               axis.title.y = element_blank(),
+               axis.text.y = element_text(size=20),
+               panel.spacing = unit(0, "lines"),
+               strip.text.x = element_blank(),
+               line = element_blank(),
+               panel.background = element_blank())
 
-suppressWarnings(ggsave(paste0("2_",NAMEEE), plot = II, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_beginning_segmentation",".jpeg"), plot = I, device = "jpeg", width = 23, height = 13))
 
 
-## part III
+## true part V
 
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-# B <- data.frame(dataTable)
-B <- data.frame(ratio_file_tsv)
-B=B[,-1] 
-colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
+write.table(graphe_V_tab, file = paste0(outputPath,"/",NAMEEE,"_final_segmentation"), sep = "\t", row.names = FALSE)
 
-# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_III"), header=TRUE)
-# C <- data.frame(dataTable)
-C <- data.frame(graphe_III_tab)
-
-III <- ggplot() +
-  geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
-  geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
-  ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
-  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
-
-III <- III + theme(axis.title.x = element_text(size=20),
-                   axis.text.x = element_blank(),
-                   axis.ticks.x = element_blank(),
-                   axis.title.y = element_blank(),
-                   axis.text.y = element_text(size=20),
-                   panel.spacing = unit(0, "lines"),
-                   strip.text.x = element_blank(),
-                   line = element_blank(),
-                   panel.background = element_blank())
-
-suppressWarnings(ggsave(paste("3_",NAMEEE,sep=""), plot = III, device = "jpeg", width = 23, height = 13))
-
-noquote("on going...")
-
-## part IV
-
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-# B <- data.frame(dataTable)
 
 B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
 colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
-
-# if saving
-# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_IV"), header=TRUE)
-# C <- data.frame(dataTable)
-C <- data.frame(graphe_IV_tab)
-
-
-IV <- ggplot() +
-  geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
-  geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
-  geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#990000") +
-  ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + xlab("chromosomes") +
-  facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x")
-
-IV <- IV + theme(axis.title.x = element_text(size=20),
-                 axis.text.x = element_blank(),
-                 axis.ticks.x = element_blank(),
-                 axis.title.y = element_blank(),
-                 axis.text.y = element_text(size=20),
-                 panel.spacing = unit(0, "lines"),
-                 strip.text.x = element_blank(),
-                 line = element_blank(),
-                 panel.background = element_blank())
-
-suppressWarnings(ggsave(paste0("4_",NAMEEE), plot = IV, device = "jpeg", width = 23, height = 13))
-
-
-## part V
-
-# dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-# B <- data.frame(dataTable)
-
-B <- data.frame(ratio_file_tsv)
-B=B[,-1] 
-colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
-
-# if saving
-# dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_V"), header=TRUE)
-# C <- data.frame(dataTable)
 
 C <- data.frame(graphe_V_tab)
 
@@ -1514,31 +1385,25 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
 V = ggplotGrob(x = V)
 V$layout$clip = "off"
 
-suppressWarnings(ggsave(paste0("5_",NAMEEE), plot = V, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".jpeg"), plot = V, device = "jpeg", width = 23, height = 13))
 
 
-## Part VI : LSTs if called
+##  True Part VI : LSTs if called
 
 if (sum(WC[,1]) != 0){
-  
-  # if saving
-  # dataTable <- read.table(paste0("Ratio_",NAMEEE,"_",short_size_window,"kb.tsv"), header=TRUE)
-  # B <- data.frame(dataTable)
   
   B <- data.frame(ratio_file_tsv)
   B=B[,-1] 
   colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
   
-  # if saving
-  # dataTable <- read.table(paste0(NAMEEE,"_",short_size_window,"kb_VI"), header=TRUE)
-  # C <- data.frame(dataTable)
-  
   C <- data.frame(graphe_VI_tab)
+  
+  write.table(graphe_VI_tab, file = paste0(outputPath,"/",NAMEEE,"_LSTs"), sep = "\t", row.names = FALSE) 
   
   closest_higlight = Closest(B$start, 30302805)[1]
   
   higlight_CCNE1 = B[B$chr == 19 & B$start == closest_higlight,]
-
+  
   data.segm = data.frame(x=higlight_CCNE1[1,2], y=higlight_CCNE1[1,5] + 1.4, xend=higlight_CCNE1[1,2], yend=higlight_CCNE1[1,5] + 0.05, chr = 19)
   data.text = data.frame(x=higlight_CCNE1[1,2], y=higlight_CCNE1[1,5] + 1.5, chr = 19, label = "CCNE1")
   
@@ -1555,31 +1420,119 @@ if (sum(WC[,1]) != 0){
     geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60", na.rm=TRUE) +
     geom_segment(data=C, aes(x=start, xend=end, y=ratio_median, yend=ratio_median), size = 3, color = "#006600", na.rm=TRUE) +
     geom_segment(data=data.segm, mapping=aes(x=x, y=y, xend=xend, yend=yend), 
-               arrow=arrow(unit(0.30,"cm"), angle = 20), size=0.6, color="black", inherit.aes = FALSE, na.rm=TRUE) +
+                 arrow=arrow(unit(0.30,"cm"), angle = 20), size=0.6, color="black", inherit.aes = FALSE, na.rm=TRUE) +
     ylim(-2, 2) +   scale_x_continuous(expand = c(0, 0)) + ggtitle(NAMEEE) +
     facet_grid(~chr, scales = "free_x", space = "free_x", switch = "x") +
     geom_point(data = higlight_CCNE1, aes(x=start, y=ratio_median), color = "orange", size = 2, na.rm=TRUE) +
     geom_text(data = data.text, mapping = aes(x = x, y = y, label = label), size = 4, inherit.aes = TRUE, na.rm=TRUE)
-
+  
   VI <- VI + theme(plot.title = element_text(hjust = 0.5),
-                 axis.title.x = element_blank(),
-                 axis.text.x = element_blank(),
-                 axis.ticks.x = element_blank(),
-                 axis.title.y = element_blank(),
-                 axis.text.y = element_text(size=15),
-                 panel.spacing = unit(0, "lines"),
-                 strip.text.x = element_blank(),
-                 line = element_blank(),
-                 panel.background = element_blank())
-
+                   axis.title.x = element_blank(),
+                   axis.text.x = element_blank(),
+                   axis.ticks.x = element_blank(),
+                   axis.title.y = element_blank(),
+                   axis.text.y = element_text(size=15),
+                   panel.spacing = unit(0, "lines"),
+                   strip.text.x = element_blank(),
+                   line = element_blank(),
+                   panel.background = element_blank())
+  
   VI = ggplotGrob(x = VI)
   VI$layout$clip = "off"
-
-  suppressWarnings(ggsave(paste0("6_",NAMEEE), plot = VI, device = "jpeg", width = 23, height = 13))
+  
+  suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_LSTs",".jpeg"), plot = VI, device = "jpeg", width = 23, height = 13))
 }
 
 
-##### Output final figure #####
+##### Quality assessement #####
+
+X_Ratio <- ratio_file_tsv
+X_I = read.table(paste0(outputPath,"/",NAMEEE, "_ratio_median_gathered.txt"), header = TRUE)
+
+median_for_correction = median(X_I$ratio_median)
+X_I["distance_ratio_to_median"] <- abs(X_I$ratio_median - median_for_correction)
+
+X_Ratio["ratio_new"] <- NA
+
+l = dim(X_Ratio)[1]
+j=1 # X_Ratio
+
+L = dim(X_I)[1]
+i=1 # X_I
+
+colnames(X_Ratio) <- c("feature", "chr", "start", "end", "ratio", "ratio_median", "ratio_new")
+
+options(show.error.messages = FALSE)
+
+cat("on going... \n")
+
+while (j < l + 1){
+  while (i < L + 1){
+    
+    if (j%%20000 == 0){
+      cat("on going... \n")
+    }
+    
+    if (X_Ratio$chr[j] == X_I$chr[i]){
+      if (X_Ratio$start[j] >= X_I$start[i] && X_Ratio$end[j] <= X_I$end[i]){
+        if (X_I$ratio_median[i] > median_for_correction){
+          X_Ratio$ratio[j]
+          X_I$distance_ratio_to_median[i]
+          X_Ratio$ratio_new[j] = X_Ratio$ratio[j] - X_I$distance_ratio_to_median[i]
+        }
+        else{
+          X_Ratio$ratio_new[j] = X_Ratio$ratio[j] + X_I$distance_ratio_to_median[i]
+        }
+        j = j + 1
+      }
+      else if (X_Ratio$start[j] >= X_I$end[i]) {
+        i = i + 1
+      }
+      else {
+        j = j + 1
+      }
+    }
+    
+    else if (X_Ratio$chr[j] > X_I$chr[i]) {
+      i = i + 1
+    }
+    
+    else{
+      j = j + 1
+    }
+    
+  }
+}
+
+options(show.error.messages = TRUE)
+
+vector_ratio_new = c(na.omit(X_Ratio$ratio_new))
+
+QC_median_point_new = median(vector_ratio_new)
+
+AbsoluteDeviationPointNew = abs(vector_ratio_new - QC_median_point_new)
+QC_MAD_point_corrected = median(AbsoluteDeviationPointNew)
+
+# quality
+
+quality = "Good"
+
+if (QC_MAD_point_corrected > 0.50){
+  quality = "Bad"
+} else if (QC_MAD_point_corrected > 0.2){
+  if (Threshold > 0.45){
+    quality = "Bad"
+  }
+  else{
+    quality = "Average"
+  }
+} else{
+  if (Threshold > 0.45){
+    quality = "Average"
+  }
+}
+
+##### Summary figure #####
 ## graphe
 
 graphe = V
@@ -1616,17 +1569,17 @@ if (CN_plus_baseline >= 4){
 ## BRCAness
 
 if (number_LSTs >= 18){
-  BRCAness = "Yes (>= 18)"
+  HRD = "Yes (>= 18)"
 } else if (number_LSTs >= 16){
-  BRCAness = "Borderline (16/17)"
+  HRD = "Borderline (16/17)"
 } else{
-  BRCAness = "No (<= 15)"
+  HRD = "No (<= 15)"
 }
 
 ## Table
 
-a = c("Threshold value","Threshold corrected","Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "BRCAness")
-b = c(Threshold, THR, number_LSTs, CN_plus_baseline, CCNE1_diag, BRCAness)
+a = c("QUALITY", "Threshold value","Threshold corrected", "Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "HRD")
+b = c(quality, Threshold, THR,  number_LSTs, CN_plus_baseline, CCNE1_diag, HRD)
 
 A = data.frame(a,b)
 
@@ -1637,19 +1590,20 @@ testy <- qplot(1:10, 1:10, geom = "blank") +
   theme(line = element_blank(), text = element_blank(), 
         panel.background = element_blank()) +
   annotation_custom(grob = tableGrob(A, rows = NULL, theme = ttheme_default(base_size = 14, base_colour = "black", base_family = "",
-                                                                    parse = FALSE)))
+                                                                            parse = FALSE)))
 
 ## Summary figure
 
 summary_plot <- suppressWarnings(ggarrange(graphe,
-                          ggarrange(ploty, test_ploty_CN_level, testy, labels = c("B", "C", "D"), ncol = 3, font.label = list(size = 14, face = "bold")),
-                          nrow = 2, labels = "A", font.label = list(size = 14, face = "bold")))
+                                           ggarrange(ploty, test_ploty_CN_level, testy, labels = c("B", "C", "D"), ncol = 3, font.label = list(size = 14, face = "bold")),
+                                           nrow = 2, labels = "A", font.label = list(size = 14, face = "bold")))
 
-suppressWarnings(ggsave(paste0("summary_plot_",NAMEEE), plot = summary_plot, device = "jpeg", width = 18, height = 10.17, dpi = 1200))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_summary_plot",".jpeg"), plot = summary_plot, device = "jpeg", width = 18, height = 10.17, dpi = 300))
 
-print("========================================================")
-print("========================================================")
-print("========================================================")
-paste0("Sample : ", NAMEEE)
-paste0("Number of LSTs (> 10Mb) : ", number_LSTs)
-paste0("BRCAness : ", BRCAness)
+cat("======================================================== \n")
+cat("======================================================== \n")
+cat("======================================================== \n")
+cat("Sample : ", NAMEEE, "\n")
+cat("Quality : ", quality, "\n")
+cat("Number of LSTs (> 10Mb) : ", number_LSTs, "\n")
+cat("BRCAness : ", HRD, "\n")
