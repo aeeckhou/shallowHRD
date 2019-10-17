@@ -1,12 +1,12 @@
 # shallowHRD
 
-This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and the segmentation of a tumor genomic profile (adapted here for [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)) to infer the Homologous Recombination status of a tumor based on the number of Large-scale State Transtions (LSTs).
+This method uses shallow Whole Genome Sequencing (sWGS ~ 1x) and the segmentation of a tumor genomic profile to infer the Homologous Recombination status of a tumor based on the number of Large-scale State Transtions (LSTs).
 
 ## Introduction
 
-*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing a normalized read counts of shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (Boeva,V. et al., 2011) but is adapted for other softwarz aswell (see run shallowHRD and Nota Bene). 
+*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output (Boeva,V. et al., 2011) but is adapted to other similar software aswell (see run shallowHRD and Nota Bene). 
 
-ControlFREEC counts reads in overlapping windows and corrects the read count for GCcontent, removing low mappability windows and segmenting the profile. Based a inferred cut-off representing a one copy difference, the segmentation is then smoothed in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale State Transitions (LSTs) along the genome.
+Softwares such as ControlFREEC count reads in sliding windows, correct this read count for GCcontent and low mappability windows and segment the genomic profile. Then *shallowHRD*, based on a inferred cut-off representing a one copy difference, smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale State Transitions (LSTs) along the genome.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ Tested on Linux and Mac.
 
 First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
-Then, the BAM file should then be processed by ControlFREEC. The recommended options are indicated in a config file example in the repository (*controlfreec_config_file_example*). Briefly, depending on the coverage of the BAM files (0.5-2x), the window size was fixed at 20kb for the analysis. It can however be increased to 60kb, with a step size half its length (the lower the coverage, the larger the window).
+Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example*). The window size was fixed here to 20kb (=> 0.5x) and the segmentation set up to be sensitive. The window size can however be increased to ~60kb, with a step size half its length depending on the coverage.
 
 Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
 
@@ -38,19 +38,17 @@ To run *shallowHRD* only one ratio file is needed (formated for ControlFREEC's o
 
 The name of the table should be in this format : *SAMPLE_NAME.bam_ratio.txt*. <br/>
 
-*shallowHRD* will rely on the *first four columns* of the input table (tabulated and Chromosome in number) : <br/>
+*shallowHRD* will rely on the *first four columns* of the input file (tabulated and Chromosome in number) : <br/>
 Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 1 &nbsp;&nbsp; 1 &nbsp;&nbsp; -1 &nbsp;&nbsp; -1 <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 . &nbsp;&nbsp; . &nbsp;&nbsp; . &nbsp;&nbsp; . <br/>
 
-Create a directory named after your sample (SAMPLE_NAME in the format example) and put the ratio file inside. 
-
-The command line to launch *shallowHRD* is (**absolute** paths) :
+The command line to launch *shallowHRD* is (it can be in absolute or relative path) :
 
 ```
-/path/to/Rscript /path/to/script/shallowHRD.R SAMPLE_NAME /absolute/path/to/created/directory /absolute/path/to/file/cytoBand_adapted_fr_hg19.csv
+/path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
 ```
 
 One file named *example.bam_ratio.txt* is downloadable in the repository to try *shallowHRD*.
