@@ -38,7 +38,7 @@ To run *shallowHRD* only one ratio file is needed (formated in ControlFREEC's ou
 
 The name of the file should be in this format : *SAMPLE_NAME.bam_ratio.txt*. <br/>
 
-*shallowHRD* will rely on the *first four columns* of the input file (tabulated and with Chromosome in number !) : <br/>
+*shallowHRD* will rely on the *first four columns* of the input file (tabulated and with column Chromosome *in number*) : <br/>
 Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 1 &nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; -1 &nbsp;&nbsp;&nbsp; -1 <br/>
 1 &nbsp;&nbsp; 20001 &nbsp;&nbsp; -1 &nbsp;&nbsp; -1 <br/>
