@@ -398,7 +398,7 @@ ShortIntestBreaksSmooth<-function(THR,lenMB,tmp,c_ind=c_ind,c_chr=c_chr,c_posS=c
 }
 
 
-##### Fast ControlFREEC gathering #####
+##### Fast gathering #####
 
 dataTable <- read.table(paste0(inputPath,"/",NAMEEE,".bam_ratio.txt"), header = TRUE)
 dataTable = dataTable[,1:4]
@@ -423,7 +423,7 @@ colnames(dataTable) = c("feature", "chromosome", "start", "end", "ratio", "ratio
 dataTable = dataTable[which(!dataTable$ratio == -1),]
 dataTable = dataTable[which(!dataTable$ratio_median == -1),]
 
-# QDNAseq data : comment two next lines (log2 transform already in QDNAseq)
+# QDNAseq data : comment two next lines (data already log2 transformed in QDNAseq)
 dataTable[,5] = log2(dataTable[,5])
 dataTable[,6] = log2(dataTable[,6])
 
@@ -856,7 +856,9 @@ ggsave(paste0(outputPath,"/",NAMEEE,"_THR",".jpeg"), plot = ploty, device = "jpe
 
 ##### Reading and initialisation #####
 
-segFiles <- list.files(outputPath, pattern="gathered.txt",full.names=T) 
+# segFiles <- list.files(outputPath, pattern="gathered.txt",full.names=T) 
+
+segFiles <- list.files(outputPath, pattern = paste0(NAMEEE, "_ratio_median_gathered.txt"),full.names=T)
 
 fileNames <- gsub(inputPath,"",segFiles) 
 fileNames <- gsub("proc_","",fileNames) 
@@ -1258,9 +1260,18 @@ while(i + 1 < L){
     i=i+1}}
 
 l=dim(test)[1]
+
+# noquote("error")
+
 if (is.null(l) == FALSE){
-  test=test[-l,]
+  if (test[l,9] == 0){
+    test=test[-l,]}
+  else{
+    test=test[-l,]
+  }
 }
+
+# noquote("end")
 
 graphe_VI_tab = test
 
@@ -1576,10 +1587,14 @@ if (number_LSTs >= 18){
   HRD = "No (<= 15)"
 }
 
+## QC_MAD_point
+
+QC_MAD_point_corrected = round(QC_MAD_point_corrected,3)
+
 ## Table
 
-a = c("QUALITY", "Threshold value","Threshold corrected", "Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "HRD")
-b = c(quality, Threshold, THR,  number_LSTs, CN_plus_baseline, CCNE1_diag, HRD)
+a = c("Threshold value", "Threshold corrected", "MAD windows corrected", "Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "QUALITY", "HRD")
+b = c(Threshold, THR, QC_MAD_point_corrected, number_LSTs, CN_plus_baseline, CCNE1_diag, quality, HRD)
 
 A = data.frame(a,b)
 
