@@ -72,7 +72,7 @@ D : Table recapitulating different data, including the case quality and the fina
 1. The overall pipeline works also on WGS with a higher coverage
 
 2. *shallowHRD* can be adapted to other segmentation outputs <br/> 
-[QDNAseq](https://github.com/ccagc/QDNAseq) for instance : just comment the two script's lines for the log2 transformation of the data <br/>
+[QDNAseq](https://github.com/ccagc/QDNAseq) for instance (just comment the two script's lines for the log2 transformation of the data) <br/>
 (Sub-section "Fast gathering" of shallowHRD.R - 10/17/2019)
 
 ## Contact
