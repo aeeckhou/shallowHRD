@@ -1,5 +1,7 @@
 ##### SCRIPT : shallowHRD #####
 
+
+
 args = commandArgs(trailingOnly=TRUE)
 
 path_to_ratio_file = args[1]
@@ -16,12 +18,14 @@ outputPath = normalizePath(output_relative_Path)
 path_to_cyto = args[3]
 cytoFile = normalizePath(path_to_cyto)
 
-##### Avoid error problem in command line #####
-
 continue_on_error <- function() { 
   paste() 
 }
 options(error=continue_on_error) 
+
+cat("======================================================== \n")
+cat("Sample : ", NAMEEE, "\n")
+cat("======================================================== \n")
 
 
 ##### Cytoband_hg19 #####
@@ -229,9 +233,9 @@ smoothBreaksLength<-function(THR,Length,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,
 }
 
 
-## breakSmoothToLST
+## breakSmoothToLGA
 
-breakSmoothToLST<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
+breakSmoothToLGA<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
   
   
   tmp<-getSegmentID(THR=THR,tmp=tmp,c_chr=c_chr+1,c_cn=c_cn,c_conf=c_conf)
@@ -325,9 +329,9 @@ breakSmoothToLST<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
 }
 
 
-## LST_control
+## LGA_control
 
-LST_control<-function(THR,lenBIN,lenMB,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
+LGA_control<-function(THR,lenBIN,lenMB,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
   
   tmp[,c_ind]<-seq(1,dim(tmp)[[1]])
   
@@ -873,7 +877,7 @@ ColNamesTMP<-c("index", "chr","chr_arm","posStart", "posEnd", "ratio")
 
 c_ind<-1; c_chr<-2;c_posS<-4; c_posE<-5; c_cn<-6; c_conf<-8
 
-LLBB<-c(3,4,5,6,7,8,9,10,11)          # size LST tested
+LLBB<-c(3,4,5,6,7,8,9,10,11)          # size LGA tested
 
 TAB<-matrix(0,nSample,20)              # matrix to stock results 
 rownames(TAB)<-seq(1:nSample)          
@@ -1204,7 +1208,7 @@ options(show.error.messages = TRUE)
 
 graphe_IV_tab = tmp_3mb
 
-tmp_3mb<-breakSmoothToLST(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
+tmp_3mb<-breakSmoothToLGA(THR,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
 graphe_V_tab = tmp_3mb
 
@@ -1230,20 +1234,20 @@ test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line))
 suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation_visual",".jpeg"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
 
 
-##### Call LSTs #####
+##### Call LGAs #####
 
-LSTs_data_frame <- as.data.frame(matrix(0, ncol = 2, nrow = 9))
-LSTs_data_frame[,1] = c(3:11)
-colnames(LSTs_data_frame) <- c("Size_LST", "Number_LST")
+LGAs_data_frame <- as.data.frame(matrix(0, ncol = 2, nrow = 9))
+LGAs_data_frame[,1] = c(3:11)
+colnames(LGAs_data_frame) <- c("Size_LGA", "Number_LGA")
 
 for (i in (3:11)){
-  WC<-LST_control(THR,lenBIN=500,lenMB=i,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
-  LSTs_data_frame[i-2,2] = sum(WC[,1])}
-write.table(LSTs_data_frame, file = paste0(outputPath,"/",NAMEEE,"_number_LSTs"), sep = "\t", row.names = FALSE)
+  WC<-LGA_control(THR,lenBIN=500,lenMB=i,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
+  LGAs_data_frame[i-2,2] = sum(WC[,1])}
+write.table(LGAs_data_frame, file = paste0(outputPath,"/",NAMEEE,"_number_LGAs"), sep = "\t", row.names = FALSE)
 
 # For graphe 10Mb 
 
-WC<-LST_control(THR,lenBIN=500,lenMB=10,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
+WC<-LGA_control(THR,lenBIN=500,lenMB=10,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
 
 
 test=cbind(tmp_3mb,WC[,1])
@@ -1261,21 +1265,15 @@ while(i + 1 < L){
 
 l=dim(test)[1]
 
-# noquote("error")
-
 if (is.null(l) == FALSE){
   if (test[l,9] == 0){
-    test=test[-l,]}
-  else{
+    test=test[-l,]}} else {
     test=test[-l,]
-  }
 }
-
-# noquote("end")
 
 graphe_VI_tab = test
 
-##### Graphe different steps LSTs calling procedure #####
+##### Graphe different steps LGAs calling procedure #####
 
 B <- data.frame(ratio_file_tsv)
 B=B[,-1]
@@ -1396,10 +1394,12 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
 V = ggplotGrob(x = V)
 V$layout$clip = "off"
 
-suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".jpeg"), plot = V, device = "jpeg", width = 23, height = 13))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".eps"), plot = V, device = "eps", units = "mm", width = 187, height = 106, dpi = 200))
+
+# width = 23, height = 13) removed for supplementary + ggtile(NAMEEE)
 
 
-##  True Part VI : LSTs if called
+##  True Part VI : LGAs if called
 
 if (sum(WC[,1]) != 0){
   
@@ -1409,7 +1409,7 @@ if (sum(WC[,1]) != 0){
   
   C <- data.frame(graphe_VI_tab)
   
-  write.table(graphe_VI_tab, file = paste0(outputPath,"/",NAMEEE,"_LSTs"), sep = "\t", row.names = FALSE) 
+  write.table(graphe_VI_tab, file = paste0(outputPath,"/",NAMEEE,"_LGAs"), sep = "\t", row.names = FALSE) 
   
   closest_higlight = Closest(B$start, 30302805)[1]
   
@@ -1451,7 +1451,7 @@ if (sum(WC[,1]) != 0){
   VI = ggplotGrob(x = VI)
   VI$layout$clip = "off"
   
-  suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_LSTs",".jpeg"), plot = VI, device = "jpeg", width = 23, height = 13))
+  suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_LGAs",".jpeg"), plot = VI, device = "jpeg", width = 23, height = 13))
 }
 
 
@@ -1559,9 +1559,9 @@ Threshold = round(Threshold, 3)
 
 THR = round(THR, 3)
 
-## number LSTs
+## number LGAs
 
-number_LSTs = sum(WC[,1])
+number_LGAs = sum(WC[,1])
 
 ## CCNE1 amplification
 
@@ -1579,9 +1579,9 @@ if (CN_plus_baseline >= 4){
 
 ## BRCAness
 
-if (number_LSTs >= 18){
+if (number_LGAs >= 18){
   HRD = "Yes (>= 18)"
-} else if (number_LSTs >= 16){
+} else if (number_LGAs >= 16){
   HRD = "Borderline (16/17)"
 } else{
   HRD = "No (<= 15)"
@@ -1593,8 +1593,8 @@ QC_MAD_point_corrected = round(QC_MAD_point_corrected,3)
 
 ## Table
 
-a = c("Threshold value", "Threshold corrected", "MAD windows corrected", "Number LSTs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "QUALITY", "HRD")
-b = c(Threshold, THR, QC_MAD_point_corrected, number_LSTs, CN_plus_baseline, CCNE1_diag, quality, HRD)
+a = c("Cut-off value", "Cut-off corrected", "MAD windows corrected", "Number LGAs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "QUALITY", "HRD")
+b = c(Threshold, THR, QC_MAD_point_corrected, number_LGAs, CN_plus_baseline, CCNE1_diag, quality, HRD)
 
 A = data.frame(a,b)
 
@@ -1615,10 +1615,9 @@ summary_plot <- suppressWarnings(ggarrange(graphe,
 
 suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_summary_plot",".jpeg"), plot = summary_plot, device = "jpeg", width = 18, height = 10.17, dpi = 300))
 
-cat("======================================================== \n")
-cat("======================================================== \n")
-cat("======================================================== \n")
 cat("Sample : ", NAMEEE, "\n")
 cat("Quality : ", quality, "\n")
-cat("Number of LSTs (> 10Mb) : ", number_LSTs, "\n")
+cat("Number of LGAs (> 10Mb) : ", number_LGAs, "\n")
 cat("BRCAness : ", HRD, "\n")
+cat("======================================================== \n")
+cat("======================================================== \n")
