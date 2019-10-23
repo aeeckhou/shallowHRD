@@ -51,7 +51,7 @@ The command line to launch *shallowHRD* is (absolute or relative paths) :
 /path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
 ```
 
-One file, named *example.bam_ratio.txt*, and the *cytoBand_adapted_fr_hg19.csv* file are downloadable in the repository to try *shallowHRD*.
+One file, named *example.bam_ratio.txt*, is downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
