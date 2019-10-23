@@ -427,7 +427,7 @@ colnames(dataTable) = c("feature", "chromosome", "start", "end", "ratio", "ratio
 dataTable = dataTable[which(!dataTable$ratio == -1),]
 dataTable = dataTable[which(!dataTable$ratio_median == -1),]
 
-# QDNAseq data : comment two next lines (data already log2 transformed in QDNAseq)
+# No log2 transformation
 dataTable[,5] = log2(dataTable[,5])
 dataTable[,6] = log2(dataTable[,6])
 
@@ -1394,9 +1394,7 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
 V = ggplotGrob(x = V)
 V$layout$clip = "off"
 
-suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".eps"), plot = V, device = "eps", units = "mm", width = 187, height = 106, dpi = 200))
-
-# width = 23, height = 13) removed for supplementary + ggtile(NAMEEE)
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".jpeg"), plot = V, device = "eps", width = 23, height = 13))
 
 
 ##  True Part VI : LGAs if called
