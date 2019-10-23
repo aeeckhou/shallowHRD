@@ -61,7 +61,7 @@ The summary plot figure recapitulating all the information will look like this :
 
 ![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/example_final_summary_plot.jpeg)
 
-A : Genomic profile with LSTs in green (the entire processed segmentation is represented in red if there are no LST) <br/>
+A : Genomic profile with LGAs in green (the entire processed segmentation is represented in red if there are no LGA) <br/>
 B : Density used to fix the difference between a copy level <br/>
 C : Graphe representing the value of each final segment (small blue circles) - <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the segmentation is good, the different copy number should appear clearly with disctinct steps <br/>
