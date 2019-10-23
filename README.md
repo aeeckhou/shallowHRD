@@ -4,7 +4,7 @@ This method uses shallow Whole Genome Sequencing (sWGS ~ 0.5-2x) and the segment
 
 ## Introduction
 
-*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html)'s output ([Boeva,V. et al., 2012](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3268243/)) but is adapted to similar softwares (see sections "run shallowHRD" and "Nota Bene"). 
+*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.5-2x) in sliding windows along the genome and its segmentation. It was developped on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) ([Boeva,V. et al., 2012](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3268243/)) but is adapted to similar softwares (see sections "run shallowHRD" and "Nota Bene"). 
 
 Softwares such as ControlFREEC count reads in sliding windows, correct the read count for GCcontent and low mappability region and then segment the genomic profile. *shallowHRD*, based on a inferred cut-off representing a one copy difference, will smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale State Transitions (LSTs) along the genome.
 
