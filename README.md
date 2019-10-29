@@ -1,10 +1,10 @@
 # shallowHRD
 
-This method uses shallow Whole Genome Sequencing (sWGS ~ 0.3-2x) and the segmentation of a tumor genomic profile to infer the Homologous Recombination status of a tumor based on the number of Large-scale Genomic Alterations (LGAs), evaluated in a similar way to LSTs (Large-scale State Transitions) but independent of the ploidy, with no reference to an absolute copy number.
+This method uses shallow Whole Genome Sequencing (sWGS ~ 0.3-1x) and the segmentation of a tumor genomic profile to infer the Homologous Recombination status of a tumor based on the number of Large-scale Genomic Alterations (LGAs), evaluated in a similar way to LSTs (Large-scale State Transitions) but independent of the ploidy, with no reference to an absolute copy number.
 
 ## Introduction
 
-*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.3-2x) in sliding windows along the genome and its segmentation. It was developped on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) ([Boeva,V. et al., 2012](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3268243/)) but is adapted to similar softwares (see sections "run shallowHRD" and "Nota Bene"). 
+*shallowHRD* is a R script that can be launched from the command line. It relies on a ratio file characterizing the normalized read counts of a shallow Whole Genome Sequencing (0.3-1x) in sliding windows along the genome and its segmentation. It was developped on the output of [ControlFREEC](http://boevalab.inf.ethz.ch/FREEC/tutorial.html) ([Boeva,V. et al., 2012](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3268243/)) but is adapted to similar softwares (see sections "run shallowHRD" and "Nota Bene"). 
 
 Softwares such as ControlFREEC count reads in sliding windows, correct the read count for GCcontent and low mappability region and then segment the genomic profile. *shallowHRD*, based on a inferred cut-off representing a one copy difference, will smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The HR status is estimated based on the number of Large-scale Genomic Alterations (LGAs) i.e. intra-chromosome arm CNA breaks along the genome.
 
