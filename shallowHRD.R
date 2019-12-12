@@ -1,7 +1,6 @@
 ##### SCRIPT : shallowHRD #####
 
 
-
 args = commandArgs(trailingOnly=TRUE)
 
 path_to_ratio_file = args[1]
@@ -189,50 +188,6 @@ getInfoSegm<-function(infoString){
 }
 
 
-## SmoothBreaks_SNP
-
-smoothBreaksLength<-function(THR,Length,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
-  
-  tmp<-getSegmentID(THR=THR,tmp=tmp,c_chr=c_chr+1,c_cn=c_cn,c_conf=c_conf)
-  tmp<-shrinkReprTMP(tmp=tmp,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
-  
-  ss<-1
-  for(ss in Length){
-    
-    tt<-which(round((tmp[,c_posE]-tmp[,c_posS])/10^6,1)<=ss)
-    
-    if(length(tt)>0){tmp<-tmp[-tt,]}
-    
-    
-    for(k in 1:(dim(tmp)[[1]]-1)){
-      
-      
-      if(tmp[k,c_chr+1]==tmp[k+1,c_chr+1] & abs(tmp[k,c_cn]-tmp[k+1,c_cn])<THR ){
-        
-        tmp[k+1,c_posS]<-tmp[k,c_posS]
-        
-        w<-c(tmp[k+1,c_posE]-tmp[k+1,c_posS],tmp[k,c_posE]-tmp[k,c_posS])
-        
-        tmp[k+1,c_cn]<-weighted.mean(c(tmp[k+1,c_cn],tmp[k,c_cn]),w)
-        
-        tmp[k,c_ind]<-0
-        
-      }
-    }
-    
-    tt<-which(tmp[,c_ind]==0)
-    if(length(tt)>0){tmp<-tmp[-tt,]}
-  }
-  
-  
-  tmp<-getSegmentID(THR=THR,tmp=tmp,c_chr=c_chr+1,c_cn=c_cn,c_conf=c_conf)
-  tmp<-shrinkReprTMP(tmp=tmp,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
-  
-  out<-tmp
-  
-}
-
-
 ## breakSmoothToLGA
 
 breakSmoothToLGA<-function(THR,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c_conf){
@@ -361,47 +316,6 @@ LGA_control<-function(THR,lenBIN,lenMB,tmp,c_ind,c_chr,c_posS,c_posE,c_cn,c_CN,c
 }
 
 
-## ShortIntestBreaksSmooth
-
-ShortIntestBreaksSmooth<-function(THR,lenMB,tmp,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_CN=c_CN,c_conf=c_conf){
-  
-  
-  segSize<-round((tmp[,c_posF]-tmp[,c_posS])/10^6,1)
-  
-  
-  for(k in 2:(dim(tmp)[[1]]-1)){
-    
-    LengthOut<-max(3,segSize[k]*2)
-    
-    if(tmp[k+1,c_chr]==tmp[k-1,c_chr] & segSize[k]<lenMB & segSize[k-1]>LengthOut & segSize[k+1]>LengthOut){
-      
-      
-      if(abs(tmp[k+1,c_cn]-tmp[k-1,c_cn])<THR){
-        
-        tmp[k+1,c_posS]<-tmp[k-1,c_posS]
-        
-        w<-c(tmp[k+1,c_posE]-tmp[k+1,c_posS],tmp[k-1,c_posE]-tmp[k-1,c_posS])
-        
-        tmp[k+1,c_cn]<-weighted.mean(c(tmp[k+1,c_cn],tmp[k-1,c_cn]),w)
-        
-        tmp[c(k-1,k),c_ind]<-0
-        
-        
-      }
-    }
-  }
-  
-  
-  tt<-which(tmp[,c_ind]==0);if(length(tt)>0){tmp<-tmp[-tt,]}
-  
-  tmp[1,c_ind]<-length(tt)
-  
-  out<-tmp
-  
-  
-}
-
-
 ##### Fast gathering #####
 
 dataTable <- read.table(paste0(inputPath,"/",NAMEEE,".bam_ratio.txt"), header = TRUE)
@@ -441,6 +355,7 @@ ratio_file_tsv = ratio # save in the moment
 
 X=X[,-1] # feature
 X=X[,-4] 
+
 
 ## Remove spurious regions based on telomere and centromere from UCSC
 
@@ -814,6 +729,7 @@ A=subset(A, A[,1] != 0)
 rownames(A) <- NULL 
 colnames(A) <- c("chr", "chr_arm", "start", "end", "ratio_median", "size")
 
+
 write.table(A, file = paste0(outputPath,"/",NAMEEE,"_ratio_median_gathered.txt"), sep = "\t", row.names = FALSE)
 
 options(show.error.messages = TRUE)
@@ -844,8 +760,6 @@ Threshold = density(test)$x[minx]
 
 test = as.data.frame(test)
 
-A = data.frame(xstart = c(0, 0.185544223315942), xend = c(0.185544223315942, 0.3))
-
 ploty <- ggplot(test, aes(x = test)) + geom_density() +
   geom_vline(aes(xintercept = Threshold), color = "blue") + 
   ggtitle(paste("Density pairwise difference large segment")) + xlab("difference") +
@@ -859,8 +773,6 @@ ggsave(paste0(outputPath,"/",NAMEEE,"_THR",".jpeg"), plot = ploty, device = "jpe
 
 
 ##### Reading and initialisation #####
-
-# segFiles <- list.files(outputPath, pattern="gathered.txt",full.names=T) 
 
 segFiles <- list.files(outputPath, pattern = paste0(NAMEEE, "_ratio_median_gathered.txt"),full.names=T)
 
@@ -1115,7 +1027,7 @@ while (i < l_0.1_3mb + 1){
               i=i+1
               c=L_3mb+1}
           }}
-        else{                 # nothing to be done
+        else{           # nothing to be done
           i=i+1
           c=L_3mb+1}
       }
@@ -1214,6 +1126,7 @@ graphe_V_tab = tmp_3mb
 
 cat("on going... \n")
 
+
 ## graphe representative of the final segmentation 
 
 test_data_frame = as.data.frame(tmp_3mb)
@@ -1243,12 +1156,12 @@ colnames(LGAs_data_frame) <- c("Size_LGA", "Number_LGA")
 for (i in (3:11)){
   WC<-LGA_control(THR,lenBIN=500,lenMB=i,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
   LGAs_data_frame[i-2,2] = sum(WC[,1])}
-write.table(LGAs_data_frame, file = paste0(outputPath,"/",NAMEEE,"_number_LGAs"), sep = "\t", row.names = FALSE)
+write.table(LGAs_data_frame, file = paste0(outputPath,"/",NAMEEE,"_number_LGAs.txt"), sep = "\t", row.names = FALSE)
+
 
 # For graphe 10Mb 
 
 WC<-LGA_control(THR,lenBIN=500,lenMB=10,tmp_3mb,c_ind=c_ind,c_chr=c_chr,c_posS=c_posS,c_posE=c_posE,c_cn=c_cn,c_conf=c_conf)
-
 
 test=cbind(tmp_3mb,WC[,1])
 colnames(test) <- c("index", "chr","chr_arm", "start", "end", "ratio_median", "size", "level", "WC")
@@ -1265,13 +1178,14 @@ while(i + 1 < L){
 
 l=dim(test)[1]
 
-if (is.null(l) == FALSE){
-  if (test[l,9] == 0){
-    test=test[-l,]}} else {
-    test=test[-l,]
-}
+if (is.null(l) == FALSE){ 
+  if (test[l,9] == 0){ 
+    while (test[l,9] == 0){
+      test=test[-l,]
+      l=l-1}}} 
 
 graphe_VI_tab = test
+
 
 ##### Graphe different steps LGAs calling procedure #####
 
@@ -1320,7 +1234,6 @@ colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
 
 C <- data.frame(graphe_I_tab)
 
-
 I <- ggplot() +
   geom_rect(data=df, aes(xmin=start, xmax=end, ymin=-Inf, ymax=Inf), fill = "grey85") +
   geom_point(data=B, aes(x = start, y = ratio), size=0.1, color= "grey60") + ggtitle(NAMEEE) +
@@ -1344,8 +1257,15 @@ suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_beginning_segmentation","
 
 ## true part V
 
-write.table(graphe_V_tab, file = paste0(outputPath,"/",NAMEEE,"_final_segmentation"), sep = "\t", row.names = FALSE)
+graphe_V_tab = data.frame(graphe_V_tab)
+graphe_V_tab$size = graphe_V_tab$end - graphe_V_tab$start + 1
 
+copy_graphe_V_tab = graphe_V_tab
+copy_graphe_V_tab = copy_graphe_V_tab[,-8]
+copy_graphe_V_tab = copy_graphe_V_tab[,-7]
+copy_graphe_V_tab = copy_graphe_V_tab[,-1]
+
+write.table(copy_graphe_V_tab, file = paste0(outputPath,"/",NAMEEE,"_final_segmentation.txt"), sep = "\t", row.names = FALSE)
 
 B <- data.frame(ratio_file_tsv)
 B=B[,-1] 
@@ -1394,7 +1314,7 @@ V <- V + theme(plot.title = element_text(hjust = 0.5),
 V = ggplotGrob(x = V)
 V$layout$clip = "off"
 
-suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".jpeg"), plot = V, device = "eps", width = 23, height = 13))
+suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation",".jpeg"), plot = V, device = "jpeg", width = 23, height = 13))
 
 
 ##  True Part VI : LGAs if called
@@ -1406,8 +1326,15 @@ if (sum(WC[,1]) != 0){
   colnames(B) <- c("chr", "start", "end", "ratio", "ratio_median")
   
   C <- data.frame(graphe_VI_tab)
+  graphe_VI_tab = data.frame(graphe_VI_tab)
+  graphe_VI_tab$size = graphe_VI_tab$end - graphe_VI_tab$start + 1
   
-  write.table(graphe_VI_tab, file = paste0(outputPath,"/",NAMEEE,"_LGAs"), sep = "\t", row.names = FALSE) 
+  copy_graphe_VI_tab = graphe_VI_tab
+  copy_graphe_VI_tab = copy_graphe_VI_tab[,-9]
+  copy_graphe_VI_tab = copy_graphe_VI_tab[,-8]
+  copy_graphe_VI_tab = copy_graphe_VI_tab[,-1]
+  
+  write.table(copy_graphe_VI_tab, file = paste0(outputPath,"/",NAMEEE,"_LGAs.txt"), sep = "\t", row.names = FALSE) 
   
   closest_higlight = Closest(B$start, 30302805)[1]
   
@@ -1458,9 +1385,6 @@ if (sum(WC[,1]) != 0){
 X_Ratio <- ratio_file_tsv
 X_I = read.table(paste0(outputPath,"/",NAMEEE, "_ratio_median_gathered.txt"), header = TRUE)
 
-median_for_correction = median(X_I$ratio_median)
-X_I["distance_ratio_to_median"] <- abs(X_I$ratio_median - median_for_correction)
-
 X_Ratio["ratio_new"] <- NA
 
 l = dim(X_Ratio)[1]
@@ -1484,14 +1408,7 @@ while (j < l + 1){
     
     if (X_Ratio$chr[j] == X_I$chr[i]){
       if (X_Ratio$start[j] >= X_I$start[i] && X_Ratio$end[j] <= X_I$end[i]){
-        if (X_I$ratio_median[i] > median_for_correction){
-          X_Ratio$ratio[j]
-          X_I$distance_ratio_to_median[i]
-          X_Ratio$ratio_new[j] = X_Ratio$ratio[j] - X_I$distance_ratio_to_median[i]
-        }
-        else{
-          X_Ratio$ratio_new[j] = X_Ratio$ratio[j] + X_I$distance_ratio_to_median[i]
-        }
+        X_Ratio$ratio_new[j] = X_Ratio$ratio[j] - X_I$ratio_median[i]
         j = j + 1
       }
       else if (X_Ratio$start[j] >= X_I$end[i]) {
@@ -1509,18 +1426,19 @@ while (j < l + 1){
     else{
       j = j + 1
     }
-    
   }
 }
 
-options(show.error.messages = TRUE)
+X_Ratio$ratio_new = abs(X_Ratio$ratio_new)
 
 vector_ratio_new = c(na.omit(X_Ratio$ratio_new))
 
-QC_median_point_new = median(vector_ratio_new)
+QC_MAD_point_corrected = mad(vector_ratio_new, constant = 1)
 
-AbsoluteDeviationPointNew = abs(vector_ratio_new - QC_median_point_new)
-QC_MAD_point_corrected = median(AbsoluteDeviationPointNew)
+# median vs MAD (tat)
+# QC_MAD_point_corrected
+# median(vector_ratio_new)
+
 
 # quality
 
@@ -1528,17 +1446,21 @@ quality = "Good"
 
 if (QC_MAD_point_corrected > 0.50){
   quality = "Bad"
-} else if (QC_MAD_point_corrected > 0.2){
+} else if (QC_MAD_point_corrected > 0.14){
   if (Threshold > 0.45){
     quality = "Bad"
   }
   else{
-    quality = "Average"
+    quality = "Average" 
   }
 } else{
   if (Threshold > 0.45){
     quality = "Average"
   }
+}
+
+if (Threshold < 0.025){
+  quality = "Normal or too contaminated"
 }
 
 ##### Summary figure #####
@@ -1572,17 +1494,17 @@ if (CN_plus_baseline >= 4){
 } else if (CN_plus_baseline >= 3){
   CCNE1_diag = "Gain [3,4["
 } else{
-  CCNE1_diag = "Not informative (<3)"
+  CCNE1_diag = "Not informative (< 3)"
 }
 
 ## BRCAness
 
-if (number_LGAs >= 18){
-  HRD = "Yes (>= 18)"
-} else if (number_LGAs >= 16){
-  HRD = "Borderline (16/17)"
+if (number_LGAs >= 20){
+  HRD = "Yes (>= 20)"
+} else if (number_LGAs >= 15){
+  HRD = "Borderline [15;19]"
 } else{
-  HRD = "No (<= 15)"
+  HRD = "No (< 15)"
 }
 
 ## QC_MAD_point
