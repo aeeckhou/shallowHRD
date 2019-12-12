@@ -73,7 +73,7 @@ D : Table recapitulating different data, including the case quality and the fina
 
 2. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
 For instance [QDNAseq](https://github.com/ccagc/QDNAseq) (Adapt output and comment the two lines of script after "No log2 transformation") <br/>
- (Sub-section "Fast-gathering" of shallowHRD.R - 10/29/2019) <br/>
+ (Sub-section "Fast-gathering" of shallowHRD.R - 12/12/2019) <br/>
 
 ## Contact
 
