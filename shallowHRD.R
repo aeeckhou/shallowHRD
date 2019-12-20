@@ -6,9 +6,10 @@ args = commandArgs(trailingOnly=TRUE)
 path_to_ratio_file = args[1]
 inputPath = normalizePath(dirname(path_to_ratio_file))
 
-NAMEEE_intermediary = sub("*/*.bam_ratio.txt", "", normalizePath(path_to_ratio_file))
-NAMEEE = sub(".*/", "", NAMEEE_intermediary)
+NAMEEE_intermediary1 = gsub("\\", "/", normalizePath(path_to_ratio_file), fixed = TRUE) # for window path
+NAMEEE_intermediary2 = sub("*/*.bam_ratio.txt", "", NAMEEE_intermediary1)
 
+NAMEEE = sub(".*/", "", NAMEEE_intermediary2)
 
 output_relative_Path = args[2]
 outputPath = normalizePath(output_relative_Path)
@@ -776,11 +777,6 @@ ggsave(paste0(outputPath,"/",NAMEEE,"_THR",".jpeg"), plot = ploty, device = "jpe
 
 segFiles <- list.files(outputPath, pattern = paste0(NAMEEE, "_ratio_median_gathered.txt"),full.names=T)
 
-fileNames <- gsub(inputPath,"",segFiles) 
-fileNames <- gsub("proc_","",fileNames) 
-fileNames <- gsub(".txt","",fileNames) 
-fileNames <- gsub("/","",fileNames) 
-
 nSample<-1
 
 coefficient = 1.0
@@ -799,7 +795,7 @@ colnames(TAB)[1:6]<-c("p_BAF","q_LRR","2copyLRR","DNA_ind","All_breaks","less3Mb
 
 ii<-1
 
-rownames(TAB)[ii]<-fileNames[ii] 
+rownames(TAB)[ii]<-"result"
 
 results<-readSegmFile(segFileName=segFiles[ii])  
 tmp<-results$tmp                                  
