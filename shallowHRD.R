@@ -1141,7 +1141,7 @@ test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line))
   theme(plot.title = element_text(hjust = 0.5, size = 14),
         axis.text.x = element_text(size=15),
         axis.title.x = element_text(size=15),
-        axis.text.y = element_text(size=15),
+        axis.text.y = element_blank(),
         axis.title.y = element_blank(),
         panel.background = element_blank())
 suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation_visual",".jpeg"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
@@ -1513,7 +1513,7 @@ QC_MAD_point_corrected = round(QC_MAD_point_corrected,3)
 
 ## Table
 
-a = c("Cut-off value", "Cut-off corrected", "MAD windows corrected", "Number LGAs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "QUALITY", "HRD")
+a = c("CNA cut-off value", "CNA cut-off corrected", "cMAD", "Number LGAs 10Mb", "CCNE1 CN to baseline", "CCNE1 evidence", "QUALITY", "HRD")
 b = c(Threshold, THR, QC_MAD_point_corrected, number_LGAs, CN_plus_baseline, CCNE1_diag, quality, HRD)
 
 A = data.frame(a,b)
