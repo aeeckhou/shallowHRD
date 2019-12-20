@@ -1142,6 +1142,7 @@ test_ploty_CN_level <- ggplot(test_ordered, aes(x = ratio_median, y = num_line))
         axis.text.x = element_text(size=15),
         axis.title.x = element_text(size=15),
         axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
         axis.title.y = element_blank(),
         panel.background = element_blank())
 suppressWarnings(ggsave(paste0(outputPath,"/",NAMEEE,"_final_segmentation_visual",".jpeg"), plot = test_ploty_CN_level, device = "jpeg", width = 20, height = 10))
