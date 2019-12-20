@@ -10,13 +10,13 @@ Softwares such as ControlFREEC count reads in sliding windows, normalize read co
 
 ## Requirements
 
-* R installed (tested with v.3.5.1)
+* R installed (tested with v.3.5)
 * The following packages installed : 
   * ggpubr (tested with v.0.2.3)
   * gridExtra (tested with v.2.3)
   * DescTools (tested with v.0.99.28)
 
-Tested on Linux and Mac.
+Tested on Linux, Mac and Windows.
 
 ## Prerequisities
 
@@ -50,6 +50,7 @@ The command line to launch *shallowHRD* is (absolute or relative paths) :
 ```
 /path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
 ```
+For Windows, it will be with /path/to/Rscript.exe.
 
 Two examples are downloadable in the repository to try *shallowHRD*.
 
