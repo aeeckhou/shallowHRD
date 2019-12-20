@@ -88,4 +88,4 @@ marc-henri.stern@curie.fr
 
 Submitted to [Bioinformatics](https://academic.oup.com/bioinformatics) as Application Note
 
-"ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" <br/> 
+"ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" A. Eeckhoutte <br/> 
