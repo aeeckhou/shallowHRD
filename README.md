@@ -22,7 +22,7 @@ Tested on Linux and Mac.
 
 First, FASTQ files should be aligned to the hg19 reference genome (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
-Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example*). The window size was fixed here to 20kb (coverage > 0.5x) and the parameters were set for a sensitive segmentation. The window size can however be increased up to ~60kb if necessary depending on the coverage, with a step size half its length.
+Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example.txt*). The window size was fixed here to 20kb (coverage > 0.4x) and the parameters were set for a sensitive segmentation. The window size can however be increased up to ~60kb if necessary depending on the coverage, with a step size half its length.
 
 Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
 
@@ -51,7 +51,7 @@ The command line to launch *shallowHRD* is (absolute or relative paths) :
 /path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
 ```
 
-One file, named *example.bam_ratio.txt*, is downloadable in the repository to try *shallowHRD*.
+Two examples are downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
@@ -69,11 +69,11 @@ D : Table recapitulating different data, including the case quality and the fina
 
 ## Nota Bene
 
-1. The overall pipeline works also on WGS with a higher coverage
-
-2. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
+1. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
 For instance [QDNAseq](https://github.com/ccagc/QDNAseq) (Adapt output and comment the two lines of script after "No log2 transformation") <br/>
  (Sub-section "Fast-gathering" of shallowHRD.R - 12/12/2019) <br/>
+
+2. The overall pipeline works also on WGS with a higher coverage 
 
 ## Contact
 
