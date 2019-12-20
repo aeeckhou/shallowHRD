@@ -59,7 +59,7 @@ All the figures and files created by the script will be available in the output 
 
 The summary plot figure recapitulating all the information will look like this :
 
-![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/example_final_summary_plot.jpeg)
+![alt text](https://github.com/aeeckhou/shallowHRD/blob/master/example1_summary_plot.jpeg)
 
 A : Genomic profile with LGAs in green (the entire processed segmentation is represented in red if there are no LGA) <br/>
 B : Density used to fix the difference between a copy level <br/>
@@ -86,7 +86,6 @@ marc-henri.stern@curie.fr
 
 ## Publication
 
-Submitted to __________.
+Submitted to Bioinformatics.
 
 "ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" <br/> 
-A. Eeckhoutte et al., 2019
