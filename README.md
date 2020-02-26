@@ -52,7 +52,7 @@ The command line to launch *shallowHRD* is (absolute or relative paths) :
 ```
 For Windows, it will be with /path/to/Rscript.exe.
 
-Two examples in hg19 and on example in hg38 are downloadable in the repository to try *shallowHRD*.
+Two examples in hg19 and one example in hg38 are downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
@@ -71,6 +71,7 @@ D : Table recapitulating different data, including the case quality and the fina
 ## Nota Bene
 
 1. Two different script of *shallowHRD* depending on the reference genome used
+
 2. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
 For instance [QDNAseq](https://github.com/ccagc/QDNAseq) (Adapt output and comment the two lines of script after "No log2 transformation") <br/>
  (Sub-section "Fast-gathering" of shallowHRD.R - 12/12/2019) <br/>
