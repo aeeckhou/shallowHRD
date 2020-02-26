@@ -48,11 +48,11 @@ Chromosome &nbsp; Start &nbsp; Ratio &nbsp; RatioMedian <br/>
 The command line to launch *shallowHRD* is (absolute or relative paths) :
 
 ```
-/path/to/Rscript /path/to/shallowHRD.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_fr_hg19.csv
+/path/to/Rscript /path/to/shallowHRD_hg19.R /path/to/SAMPLE_NAME.bam_ratio.txt /path/to/output_directory /path/to/cytoBand_adapted_hg19.csv
 ```
 For Windows, it will be with /path/to/Rscript.exe.
 
-Two examples are downloadable in the repository to try *shallowHRD*.
+Two examples in hg19 and on example in hg38 are downloadable in the repository to try *shallowHRD*.
 
 ## Outputs
 
