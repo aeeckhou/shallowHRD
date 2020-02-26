@@ -24,7 +24,7 @@ First, FASTQ files should be aligned to a reference genome (hg19 or hg38) (using
 
 Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example_hg19.txt*). The window size was fixed here to 20kb (coverage > 0.4x) and the parameters were set for a sensitive segmentation. The window size can however be increased up to ~60kb if necessary depending on the coverage, with a step size half its length.
 
-Finally, the file *cytoBand_adapted_fr_hg19.csv* (available in the repository) has to be downloaded. 
+Finally, the file *cytoBand_adapted_hg19.csv* or *cytoBand_adapted_hg38.csv* (available in the repository) has to be downloaded. 
 
 The R packages needed can be installed with the script *install_packages.R* (in repository) and the command line :
 
