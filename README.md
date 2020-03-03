@@ -1,6 +1,6 @@
 # shallowHRD
 
-This method uses shallow Whole Genome Sequencing (sWGS ~ 0.4-1x) and the segmentation of a tumor genomic profile to infer the Homologous Recombination status of a tumor based on the number of Large-scale Genomic Alterations (LGAs), evaluated in a similar way to LSTs (Large-scale State Transitions) but independent of the ploidy, with no reference to an absolute copy number.
+This method uses shallow Whole Genome Sequencing (sWGS ~ 0.4-1x) and the segmentation of a tumor genomic profile to infer the Homologous Recombination status of breast or ovarian tumor based on the number of Large-scale Genomic Alterations (LGAs), evaluated in a similar way to LSTs (Large-scale State Transitions) but independent of the ploidy, with no reference to an absolute copy number.
 
 ## Introduction
 
