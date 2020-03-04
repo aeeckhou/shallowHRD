@@ -361,7 +361,7 @@ X=X[,-4]
 ## Remove spurious regions based on telomere and centromere from UCSC
 
 X <- X[which(!(X[,1]==1 & X[,2]>=0 & X[,3]<=10000)),]
-X <- X[which(!(X[,1]==1 & X[,2]>=125184587 & X[,3]<=143184587)),]
+X <- X[which(!(X[,1]==1 & X[,2]>=119940001 & X[,3]<=145700001)),] 
 X <- X[which(!(X[,1]==1 & X[,2]>=248946422 & X[,3]<=248956422)),]
 
 X <- X[which(!(X[,1]==2 & X[,2]>=0 & X[,3]<=10000)),]
