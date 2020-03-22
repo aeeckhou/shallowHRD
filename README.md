@@ -70,7 +70,7 @@ D : Table recapitulating different data, including the case quality and the fina
 
 ## Nota Bene
 
-1. Two different script of *shallowHRD* depending on the reference genome used
+1. Two different script of *shallowHRD* are available depending on the reference genome used
 
 2. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
 For instance [QDNAseq](https://github.com/ccagc/QDNAseq) (Adapt output and comment the two lines of script after "No log2 transformation") <br/>
