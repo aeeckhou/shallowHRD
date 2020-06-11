@@ -88,8 +88,6 @@ marc-henri.stern@curie.fr
 
 
 ## Publication
+Accepted in [Bioinformatics](https://academic.oup.com/bioinformatics) as an Application Note.
 
-Submitted to [Bioinformatics](https://academic.oup.com/bioinformatics) as Application Note.
-
-"ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing" <br/>
-A. Eeckhoutte 
+Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova, ShallowHRD: detection of homologous recombination deficiency from shallow whole genome sequencing, Bioinformatics,btaa261, https://doi.org/10.1093/bioinformatics/btaa261 
