@@ -84,8 +84,6 @@ Don't hesitate to contact us for any questions, problems or adaptation of the me
 
 alexandre.eeckhoutte@curie.fr <br/>
 tatiana.popova@curie.fr <br/>
-marc-henri.stern@curie.fr
-
 
 ## Publication
 Accepted in [Bioinformatics](https://academic.oup.com/bioinformatics) as an Application Note.
