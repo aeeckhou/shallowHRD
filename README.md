@@ -12,9 +12,12 @@ Softwares such as QDNAseq count reads in sliding windows, normalize read count a
 
 * R installed (tested with v.3.5)
 * The following packages installed : 
-  * ggpubr (tested with v.0.2.3)
+  * ggpubr (tested with v.0.4.0)
   * gridExtra (tested with v.2.3)
-  * DescTools (tested with v.0.99.28)
+  * DescTools (tested with v.0.99.42)
+  * GenomicRanges (tested with v.1.44.0)
+  * ks (tested with v.1.13.2)
+  * ggrepel (tested with v.0.9.1)
 
 Tested on Linux, Mac and Windows.
 
