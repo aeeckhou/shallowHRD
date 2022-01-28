@@ -10,7 +10,7 @@ Softwares such as QDNAseq count reads in sliding windows, normalize read count a
 
 ## Requirements
 
-* R installed (tested with v.3.5)
+* R installed (tested with v.4.1.0)
 * The following packages installed : 
   * ggpubr (tested with v.0.4.0)
   * gridExtra (tested with v.2.3)
