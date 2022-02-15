@@ -73,7 +73,7 @@ D : Table recapitulating different data, including the case quality and the fina
 
 ## Nota Bene
 
-1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest version, that harbors a more robust CNA cut-off detection and overall optimization of the profiles   
+1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest versions. They harbor a more robust CNA cut-off detection and overall optimization of the profiles   
 
 2. The lastest version of *shallowHRD* is more robust and reliable but takes a longer time to run compared to older version (~1 hour by sample)
 
