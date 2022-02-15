@@ -73,7 +73,7 @@ D : Table recapitulating different data, including the case quality and the fina
 
 ## Nota Bene
 
-1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest version, that harbors a more reliable CNA cut-off detection and overall optimization of the profiles   
+1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest version, that harbors a more robust CNA cut-off detection and overall optimization of the profiles   
 
 2. Different scripts of *QDNAseq* and *controlfreec* are available depending on whether the chromosome X is included in the ratio file 
 
