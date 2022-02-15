@@ -73,13 +73,13 @@ D : Table recapitulating different data, including the case quality and the fina
 
 ## Nota Bene
 
-1. Two different script of *shallowHRD* are available depending on the reference genome used
+1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest version, that harbors a more reliable CNA cut-off detection and overall optimization of the profiles   
 
-2. *shallowHRD* can be adapted to other software with slight modification of outputs to match *shallowHRD* intput format <br/> 
-For instance [QDNAseq](https://github.com/ccagc/QDNAseq) (Adapt output and comment the two lines of script after "No log2 transformation") <br/>
- (Sub-section "Fast-gathering" of shallowHRD.R - 12/12/2019) <br/>
+2. Different scripts of *QDNAseq* and *controlfreec* are available depending on whether the chromosome X is included in the ratio file 
 
-3. The overall pipeline works also on WGS with a higher coverage
+3. *shallowHRD* can be adapted to other softwares with slight modification of outputs to match *shallowHRD* intput format <br/> 
+
+4. The overall pipeline works also on WGS with a higher coverage
 
 ## Contact
 
