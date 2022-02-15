@@ -75,6 +75,8 @@ D : Table recapitulating different data, including the case quality and the fina
 
 1. The scripts for *QDNAseq* and *controlfreec* have been updated to their latest version, that harbors a more robust CNA cut-off detection and overall optimization of the profiles   
 
+2. The lastest version of *shallowHRD* is more robust and reliable but takes a longer time to run compared to older version (~1 hour by sample)
+
 2. Different scripts of *QDNAseq* and *controlfreec* are available depending on whether the chromosome X is included in the ratio file 
 
 3. *shallowHRD* can be adapted to other softwares with slight modification of outputs to match *shallowHRD* intput format <br/> 
