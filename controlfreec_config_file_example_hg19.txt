@@ -2,8 +2,10 @@
 
 ploidy = 2,4     
 
-window=40000
-step=20000
+sex=XX
+
+window=100000
+step=50000
 
 breakPointThreshold=0.65   
 breakPointType=2 
