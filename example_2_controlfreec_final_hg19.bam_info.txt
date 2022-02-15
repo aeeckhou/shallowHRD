@@ -1,0 +1,13 @@
+Program_Version	v11.5
+Sample_Name	B257R01_final.bam
+Control_Used	False
+CGcontent_Used	True
+Mappability_Used	True
+Looking_For_Subclones	False
+Breakpoint_Threshold	0.65
+Window	100000
+Number_Of_Reads|Pairs_In_Sample	38627084
+Number_Of_Reads|Pairs_In_Control	0
+Output_Ploidy	2
+Sample_Purity	0.710892
+Good_Polynomial_Fit	True
