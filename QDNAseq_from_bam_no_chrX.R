@@ -47,7 +47,7 @@ bins <- getBinAnnotations(binSize=bin_size)
 
 paste0(outputPath,"/",NAMEEE,".bam")
 
-readCounts <- binReadCounts(bins, bamfiles=paste0(outputPath,"/",NAMEEE,".bam"))
+readCounts <- binReadCounts(bins, bamfiles=paste0(inputPath,"/",NAMEEE,".bam"))
 
 # exportBins(readCounts, file="D038R4_readcount_unfiltered_10kb.tsv", 
 #            format="tsv", type=c("copynumber"), logTransform = FALSE)
