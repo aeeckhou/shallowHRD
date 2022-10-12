@@ -25,7 +25,7 @@ Tested on Linux, Mac and Windows.
 
 First, FASTQ files should be aligned to a reference genome (hg19 or hg38) (using [BWA-MEM](https://github.com/lh3/bwa) for instance) and supplementary & duplicate reads removed from the BAM files, using [Samtools](http://www.htslib.org/doc/samtools.html) and [PicardTools' MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), respectively.
 
-**IMPORTANT:** Please only use chromosomes 1 to 22 (plus the Chromosome Y if you want to) for the alignment step. Additionnal chromosomes might introduce errors.
+**IMPORTANT:** Please only use chromosomes 1 to 22 (plus the Chromosome Y if you want to) for the alignment step. Additionnal chromosomes (contigs) might introduce errors.
 
 Then, the BAM file should then be processed by a software such as ControlFREEC. The recommended options for controlFREEC are indicated in a config file example in the repository (*controlfreec_config_file_example_hg19.txt*). The window size was fixed here to 20kb (coverage > 0.4x) and the parameters were set for a sensitive segmentation. The window size can however be increased up to ~60kb if necessary depending on the coverage, with a step size half its length.
 
