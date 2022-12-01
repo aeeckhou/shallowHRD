@@ -89,7 +89,7 @@ D : Table recapitulating different data, including the case quality and the fina
 
 Don't hesitate to contact us for any questions, problems or adaptation of the method !
 
-alexandre.eeckhoutte@curie.fr <br/>
+eeckhoutte.alexandre@gmail.com <br/>
 tatiana.popova@curie.fr <br/>
 
 ## Publication
