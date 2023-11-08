@@ -402,9 +402,6 @@ dataTable = cbind(1:L, dataTable[,1], dataTable[,2], dataTable[,2]+size_window-1
 dataTable = as.data.frame(dataTable)
 colnames(dataTable) = c("feature", "chromosome", "start", "end", "ratio", "ratio_median")
 
-dataTable = dataTable[which(!dataTable$ratio == -1),]
-dataTable = dataTable[which(!dataTable$ratio_median == -1),]
-
 # log2 transformation
 # dataTable[,5] = log2(dataTable[,5])
 # dataTable[,6] = log2(dataTable[,6])
@@ -2169,9 +2166,6 @@ dataTable = cbind(1:L, dataTable[,1], dataTable[,2], dataTable[,2]+size_window-1
 
 dataTable = as.data.frame(dataTable)
 colnames(dataTable) = c("feature", "chromosome", "start", "end", "ratio", "ratio_median")
-
-dataTable = dataTable[which(!dataTable$ratio == -1),]
-dataTable = dataTable[which(!dataTable$ratio_median == -1),]
 
 # log2 transformation
 # dataTable[,5] = log2(dataTable[,5])
