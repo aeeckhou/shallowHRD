@@ -8,7 +8,7 @@ This method uses shallow Whole Genome Sequencing (sWGS > 0.3x) and the segmentat
 
 Softwares such as QDNAseq count reads in sliding windows, normalize read count and then segment the genomic profile. *shallowHRD*, based on a inferred CNA cut-off representing a one copy difference, will smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The profile is optimised two times for a more robust output and the inferred CNA cut-off is each time based on simulations. The HR status is estimated based on the number of Large-scale Genomic Alterations (LGAs) i.e. intra-chromosome arm CNA breaks along the genome. 
 
-**IMPORTANT : This GitHub contains the *first* version of shallowHRD (v1.13). Since its publication, the software has been under continuous developpement and the shallowHRDv2 has been published in Oncogene on November 2023. It improves shallowHRD by (i) securing correct estimation of LGA by managing specific noise coming from FFPE samples and (ii) minimizing not conclusive diagnostics by resolving borderline cases. It has been validated against the PAOLA-1/ENGOT-OV25 phase-III trial.** 
+**IMPORTANT : This GitHub contains the *first* version of shallowHRD (v1.13). Since its publication, the software has been under continuous developpement and the shallowHRDv2 has been published in Oncogene on November 2023. It improves shallowHRD by (i) securing correct estimation of LGA by managing specific noise coming from FFPE samples and (ii) minimizing not conclusive diagnostics by resolving borderline cases. It has been validated against the PAOLA-1/ENGOT-OV25 phase-III trial. The version 2.0 is for now not available online.** 
 
 ## Requirements
 
