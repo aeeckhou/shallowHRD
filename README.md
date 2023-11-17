@@ -8,7 +8,7 @@ This method uses shallow Whole Genome Sequencing (sWGS > 0.3x) and the segmentat
 
 Softwares such as QDNAseq count reads in sliding windows, normalize read count and then segment the genomic profile. *shallowHRD*, based on a inferred CNA cut-off representing a one copy difference, will smooth the segmentation in a step wise manner, using first large segments, reintegrating small segments afterwards and then filtering small interstitial CNAs. The profile is optimised two times for a more robust output and the inferred CNA cut-off is each time based on simulations. The HR status is estimated based on the number of Large-scale Genomic Alterations (LGAs) i.e. intra-chromosome arm CNA breaks along the genome. 
 
-**IMPORTANT : This GitHub contains the *first* version of shallowHRD (v1.13). Since its publication, the software has been under continuous developpement and the shallowHRDv2 has been published in Oncogene on November 2023. It improves shallowHRD by (i) securing correct estimation of LGA by managing specific noise coming from FFPE samples and (ii) minimizing not conclusive diagnostics by resolving borderline cases. It has been validated against the PAOLA-1/ENGOT-OV25 phase-III trial. The version 2.0 is for now not available online.** 
+**IMPORTANT : This GitHub contains the *first* version of *shallowHRD* (v1.13). Since its publication, the software has been under continuous developpement and the *shallowHRDv2* has been published in Oncogene on November 2023. It improves *shallowHRD* by (i) securing correct estimation of LGA by managing specific noise coming from FFPE samples and (ii) minimizing not conclusive diagnostics by resolving borderline cases. It has been validated against the PAOLA-1/ENGOT-OV25 phase-III trial. The version 2.0 is for now not available online.** 
 
 ## Requirements
 
@@ -95,10 +95,10 @@ eeckhoutte.alexandre@gmail.com <br/>
 tatiana.popova@curie.fr <br/>
 
 ## Publication
-shallowHRD publication :
+*shallowHRD* publication :
 
 Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova. ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing. Bioinformatics (2020), https://doi.org/10.1093/bioinformatics/btaa261 
 
-ShallowHRDv2 publication :
+*shallowHRDv2* publication :
 
 Celine Callens, Manuel Rodrigues, Adrien Briaux, Eleonore Frouin, Alexandre Eeckhoutte, Eric Pujade-Lauraine, Victor Renault, Dominique Stoppa-Lyonnet, Ivan Bieche, Guillaume Bataillon, Lucie Karayan-Tapon, Tristan Rochelle, Florian Heitz, Sabrina Chiara Cecere, Maria Jesús Rubio Pérez, Christoph Grimm, Trine Jakobi Nøttrup, Nicoletta Colombo, Ignace Vergote, Kan Yonemori, Isabelle Ray-Coquard, Marc-Henri Stern & Tatiana Popova. Shallow whole genome sequencing approach to detect Homologous Recombination Deficiency in the PAOLA-1/ENGOT-OV25 phase-III trial. Oncogene (2023), https://doi.org/10.1038/s41388-023-02839-8
