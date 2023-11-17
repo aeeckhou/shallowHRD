@@ -97,7 +97,7 @@ tatiana.popova@curie.fr <br/>
 ## Publication
 shallowHRD publication :
 
-Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova. ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing. Bioinformatics (2020), https://doi.org/10.1093/bioinformatics/btaa261
+Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova. ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing. Bioinformatics (2020), https://doi.org/10.1093/bioinformatics/btaa261 
 
 ShallowHRDv2 publication :
 
