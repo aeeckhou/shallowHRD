@@ -97,4 +97,8 @@ tatiana.popova@curie.fr <br/>
 ## Publication
 Accepted in [Bioinformatics](https://academic.oup.com/bioinformatics) as an Application Note.
 
-Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova, ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing, Bioinformatics,btaa261, https://doi.org/10.1093/bioinformatics/btaa261 
+Alexandre Eeckhoutte, Alexandre Houy, Elodie Manié, Manon Reverdy, Ivan Bièche, Elisabetta Marangoni, Oumou Goundiam, Anne Vincent-Salomon, Dominique Stoppa-Lyonnet, François-Clément Bidard, Marc-Henri Stern, Tatiana Popova. ShallowHRD: Detection of Homologous Recombination Deficiency from shallow Whole Genome Sequencing. Bioinformatics (2020), https://doi.org/10.1093/bioinformatics/btaa261
+
+ShallowHRDv2 publication :
+
+Celine Callens, Manuel Rodrigues, Adrien Briaux, Eleonore Frouin, Alexandre Eeckhoutte, Eric Pujade-Lauraine, Victor Renault, Dominique Stoppa-Lyonnet, Ivan Bieche, Guillaume Bataillon, Lucie Karayan-Tapon, Tristan Rochelle, Florian Heitz, Sabrina Chiara Cecere, Maria Jesús Rubio Pérez, Christoph Grimm, Trine Jakobi Nøttrup, Nicoletta Colombo, Ignace Vergote, Kan Yonemori, Isabelle Ray-Coquard, Marc-Henri Stern & Tatiana Popova. Shallow whole genome sequencing approach to detect Homologous Recombination Deficiency in the PAOLA-1/ENGOT-OV25 phase-III trial. Oncogene (2023), https://doi.org/10.1038/s41388-023-02839-8 
