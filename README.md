@@ -93,6 +93,7 @@ Don't hesitate to contact us for any questions, problems or adaptation of the me
 
 eeckhoutte.alexandre@gmail.com <br/>
 tatiana.popova@curie.fr <br/>
+marc-henri.stern@curie.fr <br/>
 
 ## Publication
 *shallowHRD* publication :
