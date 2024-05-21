@@ -4346,12 +4346,12 @@ CN_baseline_final_BBS1 = round(higlight_final_BBS1$ratio_median/THR,3)
 
 
 
-## zone 21: amplifications - chr11	MTL5	CTTN	 ||   CTTN	11	70398404-70436584 (hg19)	7
+## zone 21: amplifications - chr11	MTL5	CTTN	 ||   CTTN	11	70244635 70282681 (hg19)	7
 ## FADD	11	6 (0RAOV1/CTTN)
 ## CTTN	11		7
 ## ORAOV1	11		12
 
-closest_initial_CTTN = Closest(B[which(B$chr == 11),]$start, 70417494)[1]
+closest_initial_CTTN = Closest(B[which(B$chr == 11),]$start, 70263658)[1]
 
 higlight_initial_CTTN = B[B$chr == 11 & B$start == closest_initial_CTTN,]
 
@@ -4360,7 +4360,7 @@ CN_baseline_initial_segment_CTTN = round(higlight_initial_CTTN$ratio_median/THR,
 CN_baseline_initial_point_CTTN = round(higlight_initial_CTTN$ratio/THR,3)
 
 
-closest_final_CTTN = Closest(C[which(C$chr == 11),]$start, 70417494)[1]
+closest_final_CTTN = Closest(C[which(C$chr == 11),]$start, 70263658)[1]
 
 higlight_final_CTTN = C[C$chr == 11 & C$start == closest_final_CTTN,]
 
