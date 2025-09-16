@@ -96,7 +96,7 @@ eeckhoutte.alexandre@gmail.com <br/>
 tatiana.popova@curie.fr <br/>
 marc-henri.stern@curie.fr <br/>
 
-Reach out to Marc-Henri Stern to ask about obtaining version 2.0.
+**Reach out to Marc-Henri Stern to ask about obtaining version 2.0.**
 
 ## Publications
 *shallowHRD* publication :
